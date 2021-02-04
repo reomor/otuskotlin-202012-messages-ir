@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.4.21"
+    kotlin("jvm")
 }
 
 group = "ru.otus.kotlin"
@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
 
     testImplementation("org.junit.jupiter", "junit-jupiter-api", "5.6.0")
     testImplementation("org.junit.jupiter", "junit-jupiter-engine", "5.6.0")
