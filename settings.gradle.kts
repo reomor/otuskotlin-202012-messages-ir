@@ -1,22 +1,15 @@
-rootProject.name = "m2-init-project"
+rootProject.name = "kotlin-messages"
 
 include(
-    "common",
-    "backend"
+    "common-multiplatform",
+    "common-backend"
 )
 
 pluginManagement{
-    val kotlinVersion: String by settings
-    resolutionStrategy {
-        eachPlugin {
-            when (requested.id.id) {
-                "org.jetbrains.kotlin.multiplatform" -> {
-                    useVersion(kotlinVersion)
-                }
-                "org.jetbrains.kotlin.jvm" -> {
-                    useVersion(kotlinVersion)
-                }
-            }
-        }
+    plugins {
+        val kotlinVersion: String by settings
+        kotlin("jvm") version kotlinVersion apply false
+        kotlin("multiplatform") version kotlinVersion apply false
+        kotlin("plugin.serialization") version kotlinVersion apply false
     }
 }

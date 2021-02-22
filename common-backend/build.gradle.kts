@@ -4,9 +4,6 @@ plugins {
     kotlin("jvm")
 }
 
-group = rootProject.group
-version = rootProject.version
-
 java.sourceCompatibility = VERSION_11
 java.targetCompatibility = VERSION_11
 
@@ -22,6 +19,8 @@ dependencies {
     testImplementation("org.jetbrains.kotlin", "kotlin-test-junit5")
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+tasks {
+    test {
+        useJUnitPlatform()
+    }
 }

@@ -12,9 +12,4 @@ class ExampleTestClass {
         val node: IntegerNode = IntegerNode(1)
         assertEquals(node.value, 1)
     }
-
-    @Test
-    fun `random fail`() {
-        assertTrue(SecureRandom().nextBoolean())
-    }
 }

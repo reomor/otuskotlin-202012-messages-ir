@@ -1,2 +1,17 @@
-group = "ru.otus.kotlin"
-version = "1.0-SNAPSHOT"
+plugins {
+    kotlin("multiplatform") apply false
+    kotlin("jvm") apply false
+}
+
+group = "ru.otus.kotlin.messages"
+version = "0.0.1-SNAPSHOT"
+
+subprojects {
+    group = rootProject.group
+    version = rootProject.version
+
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+}
