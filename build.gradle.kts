@@ -3,7 +3,7 @@ plugins {
     kotlin("jvm") apply false
 }
 
-group = "ru.otus.kotlin.messages"
+group = "ru.otus.kotlin.messaging"
 version = "0.0.1-SNAPSHOT"
 
 subprojects {
