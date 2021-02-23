@@ -11,6 +11,17 @@ kotlin {
         withJava()
     }
 
+    js {
+        browser {
+            testTask {
+                useKarma {
+                    useChromeHeadless()
+                }
+            }
+            binaries.executable()
+        }
+    }
+
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -37,6 +48,18 @@ kotlin {
                 implementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
                 implementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
                 implementation("org.jetbrains.kotlin:kotlin-test-junit5")
+            }
+        }
+
+        val jsMain by getting {
+            dependencies {
+                implementation(kotlin("stdlib"))
+            }
+        }
+        val jsTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+                implementation(kotlin("test-js"))
             }
         }
     }

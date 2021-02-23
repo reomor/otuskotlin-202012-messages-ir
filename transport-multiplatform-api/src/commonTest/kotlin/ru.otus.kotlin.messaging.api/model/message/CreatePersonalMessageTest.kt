@@ -15,7 +15,7 @@ import kotlin.test.assertEquals
 internal class CreatePersonalMessageTest {
 
     @Test
-    fun `request serialization and deserialization`() {
+    fun requestSerializationDeserialization() {
         val expectedRequest = CreatePersonalMessageRequest(
             requestId = "123456789abc",
             requestTime = "2021-02-23T12:00:00",
@@ -39,7 +39,7 @@ internal class CreatePersonalMessageTest {
     }
 
     @Test
-    fun `response serialization and deserialization`() {
+    fun responseSerializationDeserialization() {
         val expectedRequest = CreatePersonalMessageRequest(
             requestId = "123456789abc",
             requestTime = "2021-02-23T12:00:00",
@@ -58,16 +58,18 @@ internal class CreatePersonalMessageTest {
         )
 
         val json = Json {
+            prettyPrint = true
             serializersModule = SerializersModule {
                 polymorphic(Request::class) {
                     subclass(CreatePersonalMessageRequest::class, CreatePersonalMessageRequest.serializer())
                 }
             }
+            classDiscriminator = "type"
         }
 
-        val actualResponse = json.decodeFromString<CreatePersonalMessageResponse>(
-            json.encodeToString(expectedResponse)
-        )
+        val encodeToString = json.encodeToString(expectedResponse)
+        println(encodeToString)
+        val actualResponse = json.decodeFromString<CreatePersonalMessageResponse>(encodeToString)
 
         assertEquals(
             expected = expectedResponse,
