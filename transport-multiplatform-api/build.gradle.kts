@@ -14,8 +14,6 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-//                implementation(project(":transport-openapi"))
-
                 implementation(kotlin("stdlib-common"))
 //                api("org.jetbrains.kotlinx:kotlinx-serialization-core:$serializationPluginVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationPluginVersion")
