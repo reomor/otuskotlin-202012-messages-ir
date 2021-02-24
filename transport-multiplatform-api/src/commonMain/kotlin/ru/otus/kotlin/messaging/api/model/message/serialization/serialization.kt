@@ -11,23 +11,25 @@ import ru.otus.kotlin.messaging.api.model.common.Response
 import ru.otus.kotlin.messaging.api.model.message.CreatePersonalMessageRequest
 import ru.otus.kotlin.messaging.api.model.message.CreatePersonalMessageResponse
 
+val requestResponseSerializersModules = SerializersModule {
+
+    fun PolymorphicModuleBuilder<AbstractRequest>.registerProjectSubclasses() {
+        subclass(CreatePersonalMessageRequest::class, CreatePersonalMessageRequest.serializer())
+    }
+
+    fun PolymorphicModuleBuilder<AbstractResponse>.registerProjectSubclasses() {
+        subclass(CreatePersonalMessageResponse::class, CreatePersonalMessageResponse.serializer())
+    }
+
+    polymorphic(Request::class) { registerProjectSubclasses() }
+    polymorphic(AbstractRequest::class) { registerProjectSubclasses() }
+    polymorphic(Response::class) { registerProjectSubclasses() }
+    polymorphic(AbstractResponse::class) { registerProjectSubclasses() }
+}
+
 val requestResponseSerializer = Json {
     prettyPrint = true
     ignoreUnknownKeys = true
-    serializersModule = SerializersModule {
-
-        fun PolymorphicModuleBuilder<AbstractRequest>.registerProjectSubclasses() {
-            subclass(CreatePersonalMessageRequest::class, CreatePersonalMessageRequest.serializer())
-        }
-
-        fun PolymorphicModuleBuilder<AbstractResponse>.registerProjectSubclasses() {
-            subclass(CreatePersonalMessageResponse::class, CreatePersonalMessageResponse.serializer())
-        }
-
-        polymorphic(Request::class) { registerProjectSubclasses() }
-        polymorphic(AbstractRequest::class) { registerProjectSubclasses() }
-        polymorphic(Response::class) { registerProjectSubclasses() }
-        polymorphic(AbstractResponse::class) { registerProjectSubclasses() }
-    }
+    serializersModule = requestResponseSerializersModules
     classDiscriminator = "type"
 }
