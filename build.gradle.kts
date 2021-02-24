@@ -1,6 +1,8 @@
 plugins {
     kotlin("multiplatform") apply false
     kotlin("jvm") apply false
+
+    id("org.openapi.generator") apply false
 }
 
 group = "ru.otus.kotlin.messaging"
