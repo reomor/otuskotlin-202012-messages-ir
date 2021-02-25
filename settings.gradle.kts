@@ -4,7 +4,8 @@ include(
     "ok-common-multiplatform",
     "ok-common-backend",
     "ok-transport-multiplatform-api",
-    "ok-transport-openapi"
+    "ok-transport-openapi",
+    "ok-multiplatform-mapping"
 )
 
 pluginManagement{
