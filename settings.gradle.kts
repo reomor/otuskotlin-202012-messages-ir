@@ -1,10 +1,10 @@
 rootProject.name = "kotlin-messages"
 
 include(
-    "common-multiplatform",
-    "common-backend",
-    "transport-multiplatform-api",
-    "transport-openapi"
+    "ok-common-multiplatform",
+    "ok-common-backend",
+    "ok-transport-multiplatform-api",
+    "ok-transport-openapi"
 )
 
 pluginManagement{
