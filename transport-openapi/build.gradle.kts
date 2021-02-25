@@ -29,8 +29,8 @@ openApiGenerate {
 
     val basePackage = "${project.group}.openapi.channel"
     packageName.set(basePackage)
-//    generatorName.set("kotlin")
-    generatorName.set("kotlin-server")
+    generatorName.set("kotlin")
+//    generatorName.set("kotlin-server")
     configOptions.apply {
         put("requestDateConverter", "toString")
         put("enumPropertyNaming", "UPPERCASE")

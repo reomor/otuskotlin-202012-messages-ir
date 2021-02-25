@@ -65,19 +65,17 @@ components:
         propertyName: type
 
     BaseRequest:
-      allOf:
-        - $ref: '#/components/schemas/BaseMessage'
-        - type: object
-          description: Base object for requests
-          properties:
-            requestId:
-              type: string
-              title: Identifier
-              description: 'Request unique identifier'
-            requestTime:
-              type: string
-              title: Datetime
-              description: 'Date and time when request was received'
+      type: object
+      description: Base object for requests
+      properties:
+        requestId:
+          type: string
+          title: Identifier
+          description: 'Request unique identifier'
+        requestTime:
+          type: string
+          title: Datetime
+          description: 'Date and time when request was received'
 
     ResponseStatus:
       type: string
@@ -90,28 +88,26 @@ components:
         - INTERNAL_SERVER_ERROR
 
     BaseResponse:
-      allOf:
-        - $ref: '#/components/schemas/BaseMessage'
-        - type: object
-          description: Base object for responses
-          properties:
-            responseId:
-              type: string
-              title: Identifier
-              description: 'Request unique identifier'
-            responseTime:
-              type: string
-              title: Datetime
-              description: 'Date and time when request was received'
-            errors:
-              type: array
-              description: 'Errors list'
-              items:
-                $ref: '#/components/schemas/Error'
-            status:
-              $ref: '#/components/schemas/ResponseStatus'
-            request:
-              $ref: '#/components/schemas/BaseRequest'
+      type: object
+      description: Base object for responses
+      properties:
+        responseId:
+          type: string
+          title: Identifier
+          description: 'Request unique identifier'
+        responseTime:
+          type: string
+          title: Datetime
+          description: 'Date and time when request was received'
+        errors:
+          type: array
+          description: 'Errors list'
+          items:
+            $ref: '#/components/schemas/Error'
+        status:
+          $ref: '#/components/schemas/ResponseStatus'
+        request:
+          $ref: '#/components/schemas/BaseRequest'
 
     ChannelType:
       type: string
@@ -159,6 +155,7 @@ components:
     CreateChannelRequest:
       title: Create new channel request
       allOf:
+        - $ref: '#/components/schemas/BaseMessage'
         - $ref: '#/components/schemas/BaseRequest'
         - type: object
           properties:
@@ -168,6 +165,7 @@ components:
     CreateChannelResponse:
       title: Create new channel response
       allOf:
+        - $ref: '#/components/schemas/BaseMessage'
         - $ref: '#/components/schemas/BaseResponse'
         - type: object
           properties:
@@ -175,31 +173,43 @@ components:
               $ref: '#/components/schemas/Channel'
 
     GetChannelRequest:
-      type: object
-      description: 'Request information about channels'
-      properties:
-        filter:
-          $ref: '#/components/schemas/ChannelFilter'
+      allOf:
+        - $ref: '#/components/schemas/BaseMessage'
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          description: 'Request information about channels'
+          properties:
+            filter:
+              $ref: '#/components/schemas/ChannelFilter'
 
     GetChannelResponse:
-      type: object
-      description: 'Response with information about channels'
-      properties:
-        channels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Channel'
+      allOf:
+        - $ref: '#/components/schemas/BaseMessage'
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          description: 'Response with information about channels'
+          properties:
+            channels:
+              type: array
+              items:
+                $ref: '#/components/schemas/Channel'
 
     DeleteChannelRequest:
-      type: object
-      description: 'Request for deleting channel'
-      properties:
-        channelId:
-          type: string
+      allOf:
+        - $ref: '#/components/schemas/BaseMessage'
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          description: 'Request for deleting channel'
+          properties:
+            channelId:
+              type: string
 
     DeleteChannelResponse:
-      type: object
-      description: 'Response with result of deleting the channel'
-      properties:
-        channel:
-          $ref: '#/components/schemas/Channel'
+      allOf:
+        - $ref: '#/components/schemas/BaseMessage'
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          description: 'Response with result of deleting the channel'
+          properties:
+            channel:
+              $ref: '#/components/schemas/Channel'
