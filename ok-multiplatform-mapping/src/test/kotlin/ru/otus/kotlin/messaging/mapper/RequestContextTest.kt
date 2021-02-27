@@ -22,7 +22,7 @@ internal class RequestContextTest {
         val requestData = ChannelMessageDto(
             profileIdFrom = "1234abc",
             profileIdTo = "cba1234",
-            message = "Hello World"
+            messageText = "Hello World"
         )
         val request = CreateChannelMessageRequest(
             requestId = "1234",
@@ -42,8 +42,8 @@ internal class RequestContextTest {
         )
 
         assertEquals(
-            requestData.message,
-            context.instantMessage.message
+            requestData.messageText,
+            context.instantMessage.messageText
         )
     }
 
@@ -54,7 +54,7 @@ internal class RequestContextTest {
         val requestData = ChannelMessageDto(
             profileIdFrom = "1234abc",
             channelIdTo = "channelId",
-            message = "Hello World"
+            messageText = "Hello World"
         )
         val request = CreateChannelMessageRequest(
             requestId = "1234",
@@ -74,8 +74,8 @@ internal class RequestContextTest {
         )
 
         assertEquals(
-            requestData.message,
-            context.channelMessage.message
+            requestData.messageText,
+            context.channelMessage.messageText
         )
     }
 

@@ -1,24 +1,30 @@
 package ru.otus.kotlin.messaging
 
 data class InstantMessage(
-    val id: MessageId = MessageId.NONE,
-    val profileIdFrom: ProfileId = ProfileId.NONE,
     val profileIdTo: ProfileId = ProfileId.NONE,
-    val message: String = "",
-    val resourceLinks: List<String> = emptyList()
-)
+    override val id: MessageId = MessageId.NONE,
+    override val profileIdFrom: ProfileId = ProfileId.NONE,
+    override val messageText: String = "",
+    override val resourceLinks: List<String> = emptyList()
+) : Message()
 
 data class ChannelMessage(
-    val id: MessageId = MessageId.NONE,
-    val profileIdFrom: ProfileId = ProfileId.NONE,
     val channelId: ChannelId = ChannelId.NONE,
-    val message: String = "",
-    val resourceLinks: List<String> = emptyList()
-)
+    override val id: MessageId = MessageId.NONE,
+    override val profileIdFrom: ProfileId = ProfileId.NONE,
+    override val messageText: String = "",
+    override val resourceLinks: List<String> = emptyList()
+) : Message()
+
+sealed class Message {
+    abstract val id: MessageId
+    abstract val profileIdFrom: ProfileId
+    abstract val messageText: String
+    abstract val resourceLinks: List<String>
+}
 
 inline class MessageId(val id: String) {
     companion object {
         val NONE = MessageId("")
     }
 }
-

@@ -7,15 +7,17 @@ import ru.otus.kotlin.messaging.api.model.common.Request
 import ru.otus.kotlin.messaging.api.model.common.dto.DebugMode
 import ru.otus.kotlin.messaging.api.model.common.dto.CommonResponseStatus
 import ru.otus.kotlin.messaging.api.model.common.error.CommonErrorDto
+import ru.otus.kotlin.messaging.api.model.message.dto.ChannelMessageDto
 
 @Serializable
 @SerialName("GetChannelMessageResponse")
 data class GetChannelMessageResponse(
     val debug: DebugDto? = null,
-    override val responseId: String?,
-    override val responseTime: String?,
-    override val errors: List<CommonErrorDto>?,
-    override val status: CommonResponseStatus?,
+    val data: List<ChannelMessageDto> = emptyList(),
+    override val responseId: String? = null,
+    override val responseTime: String? = null,
+    override val errors: List<CommonErrorDto>? = emptyList(),
+    override val status: CommonResponseStatus? = CommonResponseStatus.SUCCESS,
     override val request: Request? = null
 ) : AbstractResponse() {
 

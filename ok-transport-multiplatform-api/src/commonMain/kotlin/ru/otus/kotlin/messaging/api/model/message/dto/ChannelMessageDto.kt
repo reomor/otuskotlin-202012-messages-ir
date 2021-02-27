@@ -7,6 +7,6 @@ data class ChannelMessageDto(
     val profileIdFrom: String? = null,
     val profileIdTo: String? = null,
     val channelIdTo: String? = null,
-    val message: String? = "",
+    val messageText: String? = "",
     val resourceLinks: List<String> = mutableListOf()
 )
