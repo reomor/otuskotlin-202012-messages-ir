@@ -17,14 +17,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ChannelFilter"
+              $ref: "#/components/schemas/ChannelFilterDto"
       responses:
         200:
           description: Success
           content:
             application/json":
               schema:
-                $ref: "#/components/schemas/Channel"
+                $ref: "#/components/schemas/ChannelDto"
 
 components:
   schemas:
@@ -38,7 +38,7 @@ components:
         - WARN
         - FATAL
 
-    Error:
+    ErrorDto:
       type: object
       title: Error description
       properties:
@@ -103,7 +103,7 @@ components:
           type: array
           description: 'Errors list'
           items:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ErrorDto'
         status:
           $ref: '#/components/schemas/ResponseStatus'
         request:
@@ -117,7 +117,7 @@ components:
         - public_channel
         - private_channel
 
-    Channel:
+    ChannelDto:
       type: object
       title: Channel
       description: 'Channel for communication'
@@ -130,10 +130,14 @@ components:
           type: string
           title: Name
           description: 'Channel name'
+        ownerId:
+          type: string
+          title: Identifier
+          description: Channel owner identifier
         type:
           $ref: '#/components/schemas/ChannelType'
 
-    ChannelFilter:
+    ChannelFilterDto:
       type: object
       title: Filter to get channels
       properties:
@@ -160,7 +164,7 @@ components:
         - type: object
           properties:
             channel:
-              $ref: '#/components/schemas/Channel'
+              $ref: '#/components/schemas/ChannelDto'
 
     CreateChannelResponse:
       title: Create new channel response
@@ -170,7 +174,7 @@ components:
         - type: object
           properties:
             channel:
-              $ref: '#/components/schemas/Channel'
+              $ref: '#/components/schemas/ChannelDto'
 
     GetChannelRequest:
       allOf:
@@ -180,7 +184,7 @@ components:
           description: 'Request information about channels'
           properties:
             filter:
-              $ref: '#/components/schemas/ChannelFilter'
+              $ref: '#/components/schemas/ChannelFilterDto'
 
     GetChannelResponse:
       allOf:
@@ -192,7 +196,7 @@ components:
             channels:
               type: array
               items:
-                $ref: '#/components/schemas/Channel'
+                $ref: '#/components/schemas/ChannelDto'
 
     DeleteChannelRequest:
       allOf:
@@ -212,4 +216,4 @@ components:
           description: 'Response with result of deleting the channel'
           properties:
             channel:
-              $ref: '#/components/schemas/Channel'
+              $ref: '#/components/schemas/ChannelDto'
