@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 import ru.otus.kotlin.messaging.api.model.common.AbstractResponse
 import ru.otus.kotlin.messaging.api.model.common.Request
 import ru.otus.kotlin.messaging.api.model.common.dto.DebugMode
-import ru.otus.kotlin.messaging.api.model.common.dto.ResponseStatus
-import ru.otus.kotlin.messaging.api.model.common.error.ErrorDto
+import ru.otus.kotlin.messaging.api.model.common.dto.CommonResponseStatus
+import ru.otus.kotlin.messaging.api.model.common.error.CommonErrorDto
 
 @Serializable
 @SerialName("EditChannelMessageResponse")
@@ -14,9 +14,9 @@ data class EditChannelMessageResponse(
     val debug: DebugDto? = null,
     override val responseId: String?,
     override val responseTime: String?,
-    override val errors: List<ErrorDto>?,
-    override val status: ResponseStatus?,
-    override val request: Request
+    override val errors: List<CommonErrorDto>?,
+    override val status: CommonResponseStatus?,
+    override val request: Request? = null
 ) : AbstractResponse() {
 
     @Serializable

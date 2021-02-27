@@ -6,13 +6,14 @@ import org.junit.jupiter.api.Assertions.*
 import ru.otus.kotlin.messaging.api.model.message.CreateChannelMessageRequest
 import ru.otus.kotlin.messaging.api.model.message.dto.ChannelMessageDto
 import ru.otus.kotlin.messaging.context.MessagingContext
+import ru.otus.kotlin.messaging.mapper.context.setRequest
 import ru.otus.kotlin.messaging.openapi.channel.models.ChannelDto
 import ru.otus.kotlin.messaging.openapi.channel.models.ChannelType
 import ru.otus.kotlin.messaging.openapi.channel.models.CreateChannelRequest
 import java.time.LocalDateTime
 import java.util.*
 
-internal class ContextKtTest {
+internal class RequestContextTest {
 
     @Test
     fun createPersonalMessage() {

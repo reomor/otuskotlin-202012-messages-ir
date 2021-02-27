@@ -7,6 +7,7 @@ import ru.otus.kotlin.messaging.*
 class MessagingContext(
     var messageIds: List<MessageId> = emptyList(),
     var channelId: ChannelId = ChannelId.NONE,
+    var errors: List<Error> = emptyList(),
     private var _page: Page? = null,
     private var _channel: Channel? = null,
     private var _instantMessage: InstantMessage? = null,
