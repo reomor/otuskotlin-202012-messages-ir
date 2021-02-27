@@ -22,6 +22,8 @@ dependencies {
     implementation(project(":ok-transport-openapi"))
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+tasks {
+    test {
+        useJUnitPlatform()
+    }
 }

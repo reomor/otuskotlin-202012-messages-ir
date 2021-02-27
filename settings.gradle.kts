@@ -18,6 +18,6 @@ pluginManagement{
         kotlin("multiplatform") version kotlinVersion apply false
         kotlin("plugin.serialization") version kotlinVersion apply false
 
-        id("org.openapi.generator") version openapiVersion
+        id("org.openapi.generator") version openapiVersion apply false
     }
 }

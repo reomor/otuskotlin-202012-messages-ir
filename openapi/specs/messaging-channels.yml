@@ -107,7 +107,7 @@ components:
         status:
           $ref: '#/components/schemas/ResponseStatus'
         request:
-          $ref: '#/components/schemas/BaseRequest'
+          $ref: '#/components/schemas/BaseMessage'
 
     ChannelType:
       type: string

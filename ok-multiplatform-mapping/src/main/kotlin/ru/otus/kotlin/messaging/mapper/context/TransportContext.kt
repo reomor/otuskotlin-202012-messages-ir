@@ -3,8 +3,7 @@ package ru.otus.kotlin.messaging.mapper.context
 import ru.otus.kotlin.messaging.api.model.common.Request
 import ru.otus.kotlin.messaging.api.model.common.Response
 import ru.otus.kotlin.messaging.context.MessagingContext
-import ru.otus.kotlin.messaging.openapi.channel.models.BaseRequest
-import ru.otus.kotlin.messaging.openapi.channel.models.BaseResponse
+import ru.otus.kotlin.messaging.openapi.channel.models.BaseMessage
 
 data class TransportContext(
     var messagingContext: MessagingContext = MessagingContext(),
@@ -18,6 +17,6 @@ data class CommonContext(
 )
 
 data class OpenApiContext(
-    var request: BaseRequest? = null,
-    var response: BaseResponse? = null
+    var request: BaseMessage? = null,
+    var response: BaseMessage? = null
 )

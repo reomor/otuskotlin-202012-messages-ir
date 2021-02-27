@@ -10,6 +10,7 @@ class MessagingContext(
     var profileIdFrom: ProfileId = ProfileId.NONE,
     var profileIdTo: ProfileId = ProfileId.NONE,
     var messages: List<Message> = emptyList(),
+    var channels: List<Channel> = emptyList(),
     var errors: List<Error> = emptyList(),
     private var _page: Page? = null,
     private var _channel: Channel? = null,
@@ -18,7 +19,7 @@ class MessagingContext(
     private var _profile: Profile? = null
 ) {
     var page
-        get() = _page ?: throw IllegalArgumentException("channel is not set")
+        get() = _page ?: throw IllegalArgumentException("page is not set")
         set(value) {
             _page = value
         }
