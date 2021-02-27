@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class ChannelMessageDto(
     val profileIdFrom: String? = null,
     val profileIdTo: String? = null,
-    val groupIdTo: String? = null,
+    val channelIdTo: String? = null,
     val message: String? = "",
     val resourceLinks: List<String> = mutableListOf()
 )

@@ -19,14 +19,19 @@ object ChannelMessageValidator : Validator<ChannelMessageDto?> {
 
         checkNullableObject(obj, "ChannelMessageDto", validationErrors)
         checkStringParam(obj?.profileIdFrom, "profileIdFrom", validationErrors)
-        checkStringParam(obj?.profileIdTo, "profileIdTo", validationErrors)
         checkStringParam(obj?.message, "message", validationErrors)
 
         val profileIdTo = obj?.profileIdTo
-        val groupIdTo = obj?.groupIdTo
+        val groupIdTo = obj?.channelIdTo
 
-        if ((profileIdTo == null && profileIdTo == groupIdTo) || (profileIdTo != null && groupIdTo != null)) {
+        if ((profileIdTo == null && groupIdTo == null) || (profileIdTo != null && groupIdTo != null)) {
             validationErrors.add(OnlyOneFieldMustBeSet("profileIdTo", "groupIdTo"))
+        }
+
+        if (profileIdTo != null) {
+            checkStringParam(obj.profileIdTo, "profileIdTo", validationErrors)
+        } else {
+            checkStringParam(obj?.channelIdTo, "channelIdTo", validationErrors)
         }
 
         return validationResult(validationErrors)
@@ -41,6 +46,7 @@ object ChannelMessageFilterValidator : Validator<ChannelMessageFilter?> {
 
         checkNullableObject(obj, "ChannelMessageFilter", validationErrors)
         checkStringParam(obj?.channelId, "channelId", validationErrors)
+
         if (obj != null) {
             checkLimits(obj.pageNumber, 0, "pageNumber", validationErrors)
             checkLimits(obj.pageSize, 1, "pageNumber", validationErrors)
