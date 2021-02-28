@@ -1,0 +1,219 @@
+openapi: 3.0.3
+info:
+  title: Messaging
+  description: 'Instant messaging. Channels API'
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/v1
+paths:
+  /channel:
+    post:
+      summary: Get channel description
+      requestBody:
+        description: 'Channel to create'
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChannelFilterDto"
+      responses:
+        200:
+          description: Success
+          content:
+            application/json":
+              schema:
+                $ref: "#/components/schemas/ChannelDto"
+
+components:
+  schemas:
+
+    ErrorSeverity:
+      type: string
+      title: Severity
+      description: 'Level of error severity'
+      enum:
+        - INFO
+        - WARN
+        - FATAL
+
+    ErrorDto:
+      type: object
+      title: Error description
+      properties:
+        code:
+          type: string
+          title: Symbolic code of the error
+          description: 'Symbolic code of the error'
+        level:
+          $ref: '#/components/schemas/ErrorSeverity'
+        message:
+          type: string
+          title: Error message
+          description: 'Human readable information about error'
+
+    BaseMessage:
+      type: object
+      title: Base object for all requests and responses
+      properties:
+        type:
+          type: string
+          title: Request type
+          description: 'Serialization filed for discriminator'
+      discriminator:
+        propertyName: type
+
+    BaseRequest:
+      type: object
+      description: Base object for requests
+      properties:
+        requestId:
+          type: string
+          title: Identifier
+          description: 'Request unique identifier'
+        requestTime:
+          type: string
+          title: Datetime
+          description: 'Date and time when request was received'
+
+    ResponseStatus:
+      type: string
+      title: Operation status
+      description: 'Result of requesting'
+      default: SUCCESS
+      enum:
+        - SUCCESS
+        - BAD_REQUEST
+        - INTERNAL_SERVER_ERROR
+
+    BaseResponse:
+      type: object
+      description: Base object for responses
+      properties:
+        responseId:
+          type: string
+          title: Identifier
+          description: 'Request unique identifier'
+        responseTime:
+          type: string
+          title: Datetime
+          description: 'Date and time when request was received'
+        errors:
+          type: array
+          description: 'Errors list'
+          items:
+            $ref: '#/components/schemas/ErrorDto'
+        status:
+          $ref: '#/components/schemas/ResponseStatus'
+        request:
+          $ref: '#/components/schemas/BaseMessage'
+
+    ChannelType:
+      type: string
+      title: 'Channel types'
+      description: 'Channel access type'
+      enum:
+        - public_channel
+        - private_channel
+
+    ChannelDto:
+      type: object
+      title: Channel
+      description: 'Channel for communication'
+      properties:
+        id:
+          type: string
+          title: Identifier
+          description: 'Channel identifier'
+        name:
+          type: string
+          title: Name
+          description: 'Channel name'
+        ownerId:
+          type: string
+          title: Identifier
+          description: Channel owner identifier
+        type:
+          $ref: '#/components/schemas/ChannelType'
+
+    ChannelFilterDto:
+      type: object
+      title: Filter to get channels
+      properties:
+        channelIds:
+          type: array
+          title: Identifiers
+          description: 'Channel identifiers list'
+          items:
+            type: string
+        pageSize:
+          type: integer
+          description: 'Number of channels in one page'
+          default: 10
+        pageNumber:
+          type: integer
+          description: 'Number of page in pagination'
+          default: 0
+
+    CreateChannelRequest:
+      title: Create new channel request
+      allOf:
+        - $ref: '#/components/schemas/BaseMessage'
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            channel:
+              $ref: '#/components/schemas/ChannelDto'
+
+    CreateChannelResponse:
+      title: Create new channel response
+      allOf:
+        - $ref: '#/components/schemas/BaseMessage'
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            channel:
+              $ref: '#/components/schemas/ChannelDto'
+
+    GetChannelRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseMessage'
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          description: 'Request information about channels'
+          properties:
+            filter:
+              $ref: '#/components/schemas/ChannelFilterDto'
+
+    GetChannelResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseMessage'
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          description: 'Response with information about channels'
+          properties:
+            channels:
+              type: array
+              items:
+                $ref: '#/components/schemas/ChannelDto'
+
+    DeleteChannelRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseMessage'
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          description: 'Request for deleting channel'
+          properties:
+            channelId:
+              type: string
+
+    DeleteChannelResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseMessage'
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          description: 'Response with result of deleting the channel'
+          properties:
+            channel:
+              $ref: '#/components/schemas/ChannelDto'

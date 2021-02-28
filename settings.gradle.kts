@@ -1,22 +1,23 @@
-rootProject.name = "m2-init-project"
+rootProject.name = "kotlin-messages"
 
 include(
-    "common",
-    "backend"
+    "ok-common-multiplatform",
+    "ok-common-backend",
+    "ok-transport-multiplatform-api",
+    "ok-transport-openapi",
+    "ok-multiplatform-mapping"
 )
 
 pluginManagement{
+
     val kotlinVersion: String by settings
-    resolutionStrategy {
-        eachPlugin {
-            when (requested.id.id) {
-                "org.jetbrains.kotlin.multiplatform" -> {
-                    useVersion(kotlinVersion)
-                }
-                "org.jetbrains.kotlin.jvm" -> {
-                    useVersion(kotlinVersion)
-                }
-            }
-        }
+    val openapiVersion: String by settings
+
+    plugins {
+        kotlin("jvm") version kotlinVersion apply false
+        kotlin("multiplatform") version kotlinVersion apply false
+        kotlin("plugin.serialization") version kotlinVersion apply false
+
+        id("org.openapi.generator") version openapiVersion apply false
     }
 }
