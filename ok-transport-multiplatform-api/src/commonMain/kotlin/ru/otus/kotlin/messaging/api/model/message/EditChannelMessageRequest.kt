@@ -11,9 +11,10 @@ import ru.otus.kotlin.messaging.api.model.message.dto.ChannelMessageDto
 data class EditChannelMessageRequest(
     val debug: DebugDto? = null,
     val messageId: String? = null,
+    val channelId: String? = null,
     val data: ChannelMessageDto? = null,
-    override val requestId: String?,
-    override val requestTime: String?
+    override val requestId: String? = null,
+    override val requestTime: String? = null
 ) : AbstractRequest() {
 
     @Serializable

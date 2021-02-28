@@ -133,7 +133,7 @@ private fun List<Message>.toMessageDto(): List<ChannelMessageDto> =
             )
             is ChannelMessage -> ChannelMessageDto(
                 profileIdFrom = message.profileIdFrom.id,
-                channelIdTo = message.channelId.id,
+                channelId = message.channelId.id,
                 messageText = message.messageText,
                 resourceLinks = message.resourceLinks
             )

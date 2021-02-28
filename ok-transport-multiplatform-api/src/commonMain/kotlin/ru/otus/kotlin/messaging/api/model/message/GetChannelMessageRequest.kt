@@ -11,8 +11,8 @@ import ru.otus.kotlin.messaging.api.model.message.dto.ChannelMessageFilter
 data class GetChannelMessageRequest(
     val debug: DebugDto? = null,
     val filter: ChannelMessageFilter? = null,
-    override val requestId: String?,
-    override val requestTime: String?
+    override val requestId: String? = null,
+    override val requestTime: String? = null
 ) : AbstractRequest() {
 
     @Serializable

@@ -7,10 +7,7 @@ import ru.otus.kotlin.messaging.ChannelId
 import ru.otus.kotlin.messaging.InstantMessage
 import ru.otus.kotlin.messaging.ProfileId
 import ru.otus.kotlin.messaging.api.model.common.dto.CommonResponseStatus
-import ru.otus.kotlin.messaging.api.model.message.CreateChannelMessageRequest
-import ru.otus.kotlin.messaging.api.model.message.CreateChannelMessageResponse
-import ru.otus.kotlin.messaging.api.model.message.GetChannelMessageRequest
-import ru.otus.kotlin.messaging.api.model.message.GetChannelMessageResponse
+import ru.otus.kotlin.messaging.api.model.message.*
 import ru.otus.kotlin.messaging.api.model.message.dto.ChannelMessageDto
 import ru.otus.kotlin.messaging.api.model.message.dto.ChannelMessageFilter
 import ru.otus.kotlin.messaging.mapper.context.TransportContext
@@ -22,7 +19,7 @@ import java.util.*
 internal class ResponseContextTest {
 
     @Test
-    fun createPersonalMessage() {
+    fun createChannelMessage() {
 
         val request = CreateChannelMessageRequest(
             requestId = UUID.randomUUID().toString(),
@@ -38,6 +35,74 @@ internal class ResponseContextTest {
         context.commonContext.request = request
 
         val baseResponse = CreateChannelMessageResponse(
+            responseId = UUID.randomUUID().toString(),
+            responseTime = LocalDateTime.now().toString()
+        )
+
+        val response = baseResponse.toDto(context)
+
+        assertEquals(
+            request,
+            context.commonContext.request
+        )
+        assertEquals(
+            request,
+            response.request
+        )
+        assertEquals(
+            CommonResponseStatus.SUCCESS,
+            response.status
+        )
+    }
+
+    @Test
+    fun deleteChannelMessage() {
+
+        val request = DeleteChannelMessageRequest(
+            requestId = UUID.randomUUID().toString(),
+            requestTime = LocalDateTime.now().toString(),
+            channelId = UUID.randomUUID().toString(),
+            messageId = UUID.randomUUID().toString()
+        )
+
+        val context = TransportContext()
+        context.commonContext.request = request
+
+        val baseResponse = DeleteChannelMessageResponse(
+            responseId = UUID.randomUUID().toString(),
+            responseTime = LocalDateTime.now().toString()
+        )
+
+        val response = baseResponse.toDto(context)
+
+        assertEquals(
+            request,
+            context.commonContext.request
+        )
+        assertEquals(
+            request,
+            response.request
+        )
+        assertEquals(
+            CommonResponseStatus.SUCCESS,
+            response.status
+        )
+    }
+
+    @Test
+    fun editChannelMessage() {
+
+        val request = EditChannelMessageRequest(
+            requestId = UUID.randomUUID().toString(),
+            requestTime = LocalDateTime.now().toString(),
+            channelId = UUID.randomUUID().toString(),
+            messageId = UUID.randomUUID().toString()
+        )
+
+        val context = TransportContext()
+        context.commonContext.request = request
+
+        val baseResponse = EditChannelMessageResponse(
             responseId = UUID.randomUUID().toString(),
             responseTime = LocalDateTime.now().toString()
         )
@@ -213,6 +278,53 @@ internal class ResponseContextTest {
             response.request
         )
         assertTrue(response.channels?.map { it.name }?.toSet()?.contains(channelName) ?: false)
+        assertEquals(
+            ResponseStatus.SUCCESS,
+            response.status
+        )
+    }
+
+    @Test
+    fun deleteChannel() {
+
+        val request = DeleteChannelRequest(
+            requestId = UUID.randomUUID().toString(),
+            requestTime = LocalDateTime.now().toString(),
+            channelId = UUID.randomUUID().toString()
+        )
+
+        val context = TransportContext()
+        context.openApiContext.request = request
+        context.messagingContext.channel = Channel(
+            channelId = ChannelId(request.channelId!!),
+            name = "channelName",
+            ownerId = ProfileId("1234abc"),
+            type = ru.otus.kotlin.messaging.ChannelType.PUBLIC_CHANNEL
+        )
+
+        val baseResponse = DeleteChannelResponse(
+            responseId = UUID.randomUUID().toString(),
+            responseTime = LocalDateTime.now().toString(),
+        )
+
+        val response = baseResponse.toDto(context)
+
+        assertEquals(
+            request,
+            context.openApiContext.request
+        )
+        assertEquals(
+            response,
+            context.openApiContext.response
+        )
+        assertEquals(
+            request,
+            response.request
+        )
+        assertEquals(
+            request.channelId,
+            response.channel?.id
+        )
         assertEquals(
             ResponseStatus.SUCCESS,
             response.status

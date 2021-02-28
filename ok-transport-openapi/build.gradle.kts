@@ -34,6 +34,7 @@ openApiGenerate {
     configOptions.apply {
         put("requestDateConverter", "toString")
         put("enumPropertyNaming", "UPPERCASE")
+//        put("serializableModel", "true")
     }
     inputSpec.set("${rootProject.projectDir}/openapi/specs/messaging-channels.yml")
 }

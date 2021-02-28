@@ -6,6 +6,7 @@ import ru.otus.kotlin.messaging.*
 
 class MessagingContext(
     var messageIds: List<MessageId> = emptyList(),
+    var channelIds: List<ChannelId> = emptyList(),
     var channelId: ChannelId = ChannelId.NONE,
     var profileIdFrom: ProfileId = ProfileId.NONE,
     var profileIdTo: ProfileId = ProfileId.NONE,

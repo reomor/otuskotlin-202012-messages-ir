@@ -12,10 +12,10 @@ import ru.otus.kotlin.messaging.api.model.common.error.CommonErrorDto
 @SerialName("EditChannelMessageResponse")
 data class EditChannelMessageResponse(
     val debug: DebugDto? = null,
-    override val responseId: String?,
-    override val responseTime: String?,
-    override val errors: List<CommonErrorDto>?,
-    override val status: CommonResponseStatus?,
+    override val responseId: String? = null,
+    override val responseTime: String? = null,
+    override val errors: List<CommonErrorDto>? = emptyList(),
+    override val status: CommonResponseStatus? = CommonResponseStatus.SUCCESS,
     override val request: Request? = null
 ) : AbstractResponse() {
 

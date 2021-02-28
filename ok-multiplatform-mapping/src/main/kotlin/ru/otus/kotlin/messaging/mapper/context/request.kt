@@ -27,10 +27,10 @@ fun MessagingContext.setRequest(request: CreateChannelMessageRequest) {
                         messageText = messageText ?: "",
                         resourceLinks = resourceLinks
                     )
-                    channelIdTo != null -> this@setRequest.channelMessage = ChannelMessage(
+                    channelId != null -> this@setRequest.channelMessage = ChannelMessage(
                         id = MessageId(UUID.randomUUID().toString()),
                         profileIdFrom = profileIdFrom?.let { ProfileId(it) } ?: ProfileId.NONE,
-                        channelId = channelIdTo?.let { ChannelId(it) } ?: ChannelId.NONE,
+                        channelId = channelId?.let { ChannelId(it) } ?: ChannelId.NONE,
                         messageText = messageText ?: "",
                         resourceLinks = resourceLinks
                     )
@@ -44,11 +44,13 @@ fun MessagingContext.setRequest(request: CreateChannelMessageRequest) {
 
 fun MessagingContext.setRequest(request: DeleteChannelMessageRequest) {
     request.messageId?.let { messageId -> this.messageIds = listOf(MessageId(messageId)) }
+    request.channelId?.let { channelId -> this.channelId = ChannelId(channelId) }
 }
 
 fun MessagingContext.setRequest(request: EditChannelMessageRequest) {
     request.messageId?.let { messageId ->
-        this.messageIds = listOf(MessageId(messageId))
+        messageIds = listOf(MessageId(messageId))
+        request.channelId?.let { channelId = ChannelId(it) }
         request.data?.let { channelMessageDto ->
             val validationResult = ChannelMessageValidator.validate(channelMessageDto)
             if (validationResult.isSuccess) {
@@ -61,10 +63,10 @@ fun MessagingContext.setRequest(request: EditChannelMessageRequest) {
                             messageText = messageText ?: "",
                             resourceLinks = resourceLinks
                         )
-                        channelIdTo != null -> this@setRequest.channelMessage = ChannelMessage(
+                        channelId != null -> this@setRequest.channelMessage = ChannelMessage(
                             id = MessageId(UUID.randomUUID().toString()),
                             profileIdFrom = profileIdFrom?.let { ProfileId(it) } ?: ProfileId.NONE,
-                            channelId = channelIdTo?.let { ChannelId(it) } ?: ChannelId.NONE,
+                            channelId = channelId?.let { ChannelId(it) } ?: ChannelId.NONE,
                             messageText = messageText ?: "",
                             resourceLinks = resourceLinks
                         )
@@ -108,6 +110,11 @@ fun MessagingContext.setRequest(request: DeleteChannelRequest) {
 }
 
 fun MessagingContext.setRequest(request: GetChannelRequest) {
-    request.filter?.let { filter -> filter.pageNumber?.let { page = page.copy(pageNumber = it) } }
-    request.filter?.let { filter -> filter.pageSize?.let { page = page.copy(pageSize = it) } }
+    request.filter?.let {
+        filter ->
+        page = Page(filter.pageSize ?: 10, filter.pageNumber ?: 0)
+        filter.channelIds?.let { list -> channelIds = list.map { ChannelId(it) } }
+        filter.pageNumber?.let { page = page.copy(pageNumber = it) }
+        filter.pageSize?.let { page = page.copy(pageSize = it) }
+    }
 }

@@ -22,7 +22,7 @@ object ChannelMessageValidator : Validator<ChannelMessageDto?> {
         checkStringParam(obj?.messageText, "message", validationErrors)
 
         val profileIdTo = obj?.profileIdTo
-        val groupIdTo = obj?.channelIdTo
+        val groupIdTo = obj?.channelId
 
         if ((profileIdTo == null && groupIdTo == null) || (profileIdTo != null && groupIdTo != null)) {
             validationErrors.add(OnlyOneFieldMustBeSet("profileIdTo", "groupIdTo"))
@@ -31,7 +31,7 @@ object ChannelMessageValidator : Validator<ChannelMessageDto?> {
         if (profileIdTo != null) {
             checkStringParam(obj.profileIdTo, "profileIdTo", validationErrors)
         } else {
-            checkStringParam(obj?.channelIdTo, "channelIdTo", validationErrors)
+            checkStringParam(obj?.channelId, "channelIdTo", validationErrors)
         }
 
         return validationResult(validationErrors)
@@ -45,18 +45,17 @@ object ChannelMessageFilterValidator : Validator<ChannelMessageFilter?> {
         val validationErrors = mutableListOf<ValidationError>()
 
         checkNullableObject(obj, "ChannelMessageFilter", validationErrors)
-        checkStringParam(obj?.channelId, "channelId", validationErrors)
 
         if (obj != null) {
             checkLimits(obj.pageNumber, 0, "pageNumber", validationErrors)
-            checkLimits(obj.pageSize, 1, "pageNumber", validationErrors)
+            checkLimits(obj.pageSize, 1, "pageSize", validationErrors)
         }
 
         val profileIdTo = obj?.profileIdTo
-        val groupIdTo = obj?.channelIdTo
+        val channelId = obj?.channelId
 
-        if ((profileIdTo == null && groupIdTo == null) || (profileIdTo != null && groupIdTo != null)) {
-            validationErrors.add(OnlyOneFieldMustBeSet("profileIdTo", "groupIdTo"))
+        if ((profileIdTo == null && channelId == null) || (profileIdTo != null && channelId != null)) {
+            validationErrors.add(OnlyOneFieldMustBeSet("profileIdTo", "channelId"))
         }
 
         return validationResult(validationErrors)
@@ -84,12 +83,14 @@ private fun checkStringParam(
 }
 
 private fun <T : Comparable<T>> checkLimits(
-    param: T,
-    limit: T,
+    param: T?,
+    limit: T?,
     paramName: String,
     validationErrors: MutableList<ValidationError>
 ) {
-    if (param < limit) {
+    if (param == null || limit == null) {
+        validationErrors.add(RequiredFieldIsNotSet("param/limit"))
+    } else if (param < limit) {
         validationErrors.add(FieldBreaksConstraint(paramName, limit.toString()))
     }
 }

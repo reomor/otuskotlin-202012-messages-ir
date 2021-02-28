@@ -11,8 +11,8 @@ data class DeleteChannelMessageRequest(
     val debug: DebugDto? = null,
     val messageId: String? = null,
     val channelId: String? = null,
-    override val requestId: String?,
-    override val requestTime: String?
+    override val requestId: String? = null,
+    override val requestTime: String? = null
 ) : AbstractRequest() {
 
     @Serializable
