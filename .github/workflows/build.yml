@@ -29,3 +29,16 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: code-coverage-report/build/reports/jacoco/codeCoverageReport/codeCoverageReport.xml
+      - name: Analyze with SonarCloud
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          # for some reasons falls with 'java not found'
+          JAVA_HOME: ''
+        with:
+          args: >
+            -Dsonar.organization=reomor
+            -Dsonar.projectKey=reomor_otuskotlin-202012-messages-ir
+            -Dsonar.coverage.jacoco.xmlReportPaths=code-coverage-report/build/reports/jacoco/codeCoverageReport/codeCoverageReport.xml
+            -Dsonar.verbose=true
