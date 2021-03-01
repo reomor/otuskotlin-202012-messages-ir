@@ -8,6 +8,9 @@ include(
     "ok-multiplatform-mapping"
 )
 
+// reporting utility projects
+include("code-coverage-report")
+
 pluginManagement{
 
     val kotlinVersion: String by settings

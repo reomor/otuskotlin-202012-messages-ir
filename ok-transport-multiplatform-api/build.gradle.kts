@@ -1,6 +1,7 @@
 val serializationPluginVersion: String by project
 
 plugins {
+    id("myproject.java-conventions")
     kotlin("multiplatform")
     kotlin("plugin.serialization")
 }

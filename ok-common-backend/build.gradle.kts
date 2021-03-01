@@ -1,6 +1,7 @@
 import org.gradle.api.JavaVersion.*
 
 plugins {
+    id("myproject.java-conventions")
     kotlin("jvm")
 }
 
@@ -24,10 +25,4 @@ dependencies {
     testImplementation("org.junit.jupiter", "junit-jupiter-api", junitVersion)
     testImplementation("org.junit.jupiter", "junit-jupiter-engine", junitVersion)
     testImplementation("org.jetbrains.kotlin", "kotlin-test-junit5")
-}
-
-tasks {
-    test {
-        useJUnitPlatform()
-    }
 }
