@@ -1,7 +1,7 @@
 # otuskotlin-202012-messages-ir
 202012, Личные сообщения, Ионин Рэм
 
-# Stack 
+## Stack 
 
 - Kotlin 1.4.30
 - Kotlin multiplatform
@@ -10,12 +10,17 @@
 - JUnit 5
 - Gradle/Kotlin DSL
 
-# Branches
+## Github actions
+
+- [Code coverage](https://codecov.io/gh/reomor/otuskotlin-202012-messages-ir/)
+- [CloudSonar](https://sonarcloud.io/dashboard?id=reomor_otuskotlin-202012-messages-ir)
+
+## Branches
 - [DSL](https://github.com/reomor/otuskotlin-202012-messages-ir/tree/usefull-stuff)
 - [hw01](https://github.com/reomor/otuskotlin-202012-messages-ir/tree/m2-init-project)
 - [hw02](https://github.com/reomor/otuskotlin-202012-messages-ir/tree/hw02-transport-models)
 
-# Homework
+## Homework
 
 ### hw01
 
