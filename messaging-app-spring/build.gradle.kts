@@ -16,8 +16,12 @@ dependencies {
     val springFuVersion: String by project
     val serializationVersion: String by project
 
-    implementation(kotlin("stdlib"))
+    implementation(project(":ok-multiplatform-mapping"))
+    implementation(project(":ok-common-backend"))
+    implementation(project(":ok-transport-multiplatform-api"))
+    implementation(project(":ok-transport-openapi"))
 
+    implementation(kotlin("stdlib"))
     implementation("org.springframework.boot:spring-boot-starter-web")
 
     implementation("org.springframework.fu:spring-fu-kofu:$springFuVersion")
@@ -26,16 +30,32 @@ dependencies {
 
     testImplementation(kotlin("test-junit5"))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-webflux")
 }
 
 tasks {
 
-    compileKotlin {
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
             jvmTarget = "11"
         }
     }
+
+// Equivalent to above
+//    compileKotlin {
+//        kotlinOptions {
+//            freeCompilerArgs = listOf("-Xjsr305=strict")
+//            jvmTarget = "11"
+//        }
+//    }
+//
+//    compileTestKotlin {
+//        kotlinOptions {
+//            freeCompilerArgs = listOf("-Xjsr305=strict")
+//            jvmTarget = "11"
+//        }
+//    }
 
     test {
         useJUnitPlatform()
