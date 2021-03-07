@@ -6,7 +6,8 @@ include(
     "ok-transport-multiplatform-api",
     "ok-transport-openapi",
     "ok-multiplatform-mapping",
-    "messaging-app-spring"
+    "messaging-app-spring",
+    "messaging-app-ktor"
 )
 
 // reporting utility projects
