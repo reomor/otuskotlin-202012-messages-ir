@@ -5,18 +5,18 @@ import org.springframework.web.servlet.function.ServerResponse
 import org.springframework.web.servlet.function.ServerResponse.ok
 import ru.otus.kotlin.messaging.api.model.message.CreateChannelMessageRequest
 import ru.otus.kotlin.messaging.api.model.message.CreateChannelMessageResponse
-import java.time.LocalDateTime
-import java.util.*
+import ru.otus.kotlin.messaging.mapper.context.TransportContext
+import ru.otus.kotlin.messaging.mapper.context.fromContext
+import ru.otus.kotlin.messaging.mapper.context.setRequest
 
 class MessagingController {
     fun create(serverRequest: ServerRequest): ServerResponse {
         val request = serverRequest.body(CreateChannelMessageRequest::class.java)
-        return ok().body(
-            CreateChannelMessageResponse(
-                responseId = UUID.randomUUID().toString(),
-                responseTime = LocalDateTime.now().toString(),
-                request = request
-            )
-        )
+        val context = TransportContext()
+        context.commonContext.request = request
+        context.messagingContext.setRequest(request)
+
+        return ok()
+            .body(CreateChannelMessageResponse().fromContext(context))
     }
 }

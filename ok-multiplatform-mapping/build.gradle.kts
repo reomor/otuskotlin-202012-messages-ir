@@ -5,6 +5,7 @@ plugins {
 
 group = rootProject.group
 version = rootProject.version
+java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
     mavenCentral()
@@ -24,6 +25,14 @@ dependencies {
 }
 
 tasks {
+
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions {
+            freeCompilerArgs = listOf("-Xjsr305=strict")
+            jvmTarget = "11"
+        }
+    }
+
     test {
         useJUnitPlatform()
     }
