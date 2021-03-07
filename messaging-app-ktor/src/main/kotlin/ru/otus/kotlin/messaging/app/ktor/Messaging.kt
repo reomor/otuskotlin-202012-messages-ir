@@ -4,13 +4,23 @@ import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.http.content.*
+import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.serialization.*
+import ru.otus.kotlin.messaging.api.model.common.Request
+import ru.otus.kotlin.messaging.api.model.common.dto.CommonResponseStatus
+import ru.otus.kotlin.messaging.api.model.common.error.CommonErrorDto
+import ru.otus.kotlin.messaging.api.model.message.CreateChannelMessageRequest
+import ru.otus.kotlin.messaging.api.model.message.CreateChannelMessageResponse
+import ru.otus.kotlin.messaging.api.model.message.serialization.requestResponseSerializer
+import ru.otus.kotlin.messaging.app.ktor.service.MessagingService
 
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
+
+    val messagingService = MessagingService()
 
     install(CORS) {
         method(HttpMethod.Options)
@@ -25,19 +35,37 @@ fun Application.module(testing: Boolean = false) {
 
     install(ContentNegotiation) {
         json(
-            contentType = ContentType.Application.Json
+            contentType = ContentType.Application.Json,
+            json = requestResponseSerializer
         )
     }
 
     routing {
 
-        get("/") {
-            call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
-        }
-
         // Static feature. Try to access `/static/ktor_logo.svg`
         static("/static") {
             resources("static")
+        }
+
+        route(MessagingApi.baseUri) {
+            post(MessagingApi.createMessageUri) {
+                try {
+                    val request = call.receive<Request>() as CreateChannelMessageRequest
+                    val response = messagingService.create(request)
+                    call.respond(response)
+                } catch (e: Exception) {
+                    call.respond(
+                        CreateChannelMessageResponse(
+                            status = CommonResponseStatus.BAD_REQUEST,
+                            errors = listOf(
+                                CommonErrorDto(
+                                    message = e.localizedMessage
+                                )
+                            )
+                        )
+                    )
+                }
+            }
         }
     }
 }

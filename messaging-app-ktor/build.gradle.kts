@@ -20,6 +20,11 @@ dependencies {
     val ktorVersion: String by project
     val logbackVersion: String by project
 
+    implementation(project(":ok-multiplatform-mapping"))
+    implementation(project(":ok-common-backend"))
+    implementation(project(":ok-transport-multiplatform-api"))
+    implementation(project(":ok-transport-openapi"))
+
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
@@ -29,8 +34,8 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
 }
 
-kotlin.sourceSets["main"].kotlin.srcDir("src/main/kotlin")
-kotlin.sourceSets["test"].kotlin.srcDir("src/test/kotlin")
+kotlin.sourceSets["main"].kotlin.srcDirs("src/main/kotlin")
+kotlin.sourceSets["test"].kotlin.srcDirs("src/test/kotlin")
 
 sourceSets["main"].resources.srcDirs(
     "resources",
