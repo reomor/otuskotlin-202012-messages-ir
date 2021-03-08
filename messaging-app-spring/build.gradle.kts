@@ -15,6 +15,7 @@ repositories {
 dependencies {
     val springFuVersion: String by project
     val serializationVersion: String by project
+    val jacksonKotlinVersion: String by project
 
     implementation(project(":ok-multiplatform-mapping"))
     implementation(project(":ok-common-backend"))
@@ -26,6 +27,7 @@ dependencies {
 
     implementation("org.springframework.fu:spring-fu-kofu:$springFuVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonKotlinVersion")
     implementation("org.springframework:spring-webmvc")
 
     testImplementation(kotlin("test-junit5"))

@@ -1,12 +1,19 @@
 package ru.otus.kotlin.messaging.app.spring
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.springframework.fu.kofu.webApplication
 import org.springframework.fu.kofu.webmvc.webMvc
 import org.springframework.http.converter.HttpMessageConverter
 import org.springframework.http.converter.json.KotlinSerializationJsonHttpMessageConverter
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import ru.otus.kotlin.messaging.app.spring.controller.ChannelController
 import ru.otus.kotlin.messaging.app.spring.controller.MessagingController
 import ru.otus.kotlin.messaging.mapper.openapi.generalRequestResponseSerializer
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
+import ru.otus.kotlin.messaging.app.spring.serialization.CreateChannelRequestJsonDeserializer
+import ru.otus.kotlin.messaging.app.spring.serialization.CreateChannelResponseJsonDeserializer
+import ru.otus.kotlin.messaging.openapi.channel.models.BaseMessage
 
 object MessagingApi {
     const val createMessageUri = "/messaging/create"
@@ -30,6 +37,14 @@ val app = webApplication {
         bean<HttpMessageConverter<Any>>(name = "kotlinSerializationJsonHttpMessageConverter") {
             KotlinSerializationJsonHttpMessageConverter(generalRequestResponseSerializer)
         }
+        bean<HttpMessageConverter<Any>>(name = "mappingJackson2HttpMessageConverter") {
+            val mapper = Jackson2ObjectMapperBuilder()
+                .deserializerByType(BaseMessage::class.java, CreateChannelRequestJsonDeserializer)
+                .deserializerByType(BaseMessage::class.java, CreateChannelResponseJsonDeserializer)
+                .build<ObjectMapper>()
+                .registerModule(KotlinModule())
+            MappingJackson2HttpMessageConverter(mapper)
+        }
     }
 
     webMvc {
@@ -51,7 +66,10 @@ val app = webApplication {
 
         converters {
             string()
-//            use customized bean instead of it
+            //use customized bean instead of it
+//            jackson{
+//            }
+            //use customized bean instead of it
 //            kotlinSerialization()
         }
     }

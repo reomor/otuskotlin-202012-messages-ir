@@ -14,7 +14,6 @@ import java.time.Duration
 import java.time.LocalDateTime
 import java.util.*
 
-@Disabled
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class ChannelControllerTest {
 
