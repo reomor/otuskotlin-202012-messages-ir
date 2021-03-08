@@ -161,6 +161,7 @@ fun CreateChannelResponse.fromContext(
 ): CreateChannelResponse =
     transportContext.addToOpenApiContext {
         CreateChannelResponse(
+            type = "CreateChannelResponse",
             responseId = responseId,
             responseTime = responseTime,
             errors = transportContext.messagingContext.errors.toOpenApiErrorDto(),

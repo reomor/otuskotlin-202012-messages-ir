@@ -25,17 +25,26 @@ dependencies {
 openApiGenerate {
 
     // only models
-    globalProperties.put("models", "")
+    globalProperties.apply {
+        put("models", "")
+        put("modelDocs", "false")
+        put("invoker", "false")
+        put("apis", "false")
+    }
 
     val basePackage = "${project.group}.openapi.channel"
     packageName.set(basePackage)
     generatorName.set("kotlin")
 //    generatorName.set("kotlin-server")
+
     configOptions.apply {
         put("requestDateConverter", "toString")
         put("enumPropertyNaming", "UPPERCASE")
 //        put("serializableModel", "true")
+//        put("serializableLibrary", "jackson")
+//        put("library", "multiplatform")
     }
+
     inputSpec.set("${rootProject.projectDir}/openapi/specs/messaging-channels.yml")
 }
 

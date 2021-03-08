@@ -1,6 +1,7 @@
 plugins {
     id("myproject.java-conventions")
     kotlin("jvm")
+    kotlin("plugin.serialization")
 }
 
 group = rootProject.group
@@ -13,15 +14,18 @@ repositories {
 
 dependencies {
     val junitVersion: String by project
+    val serializationVersion: String by project
 
     implementation(project(":ok-common-backend"))
     implementation(project(":ok-transport-multiplatform-api"))
     implementation(project(":ok-transport-openapi"))
 
     implementation(kotlin("stdlib"))
-    implementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    implementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-    implementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 }
 
 tasks {

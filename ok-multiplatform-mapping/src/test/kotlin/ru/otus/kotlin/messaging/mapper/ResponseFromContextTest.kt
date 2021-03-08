@@ -33,10 +33,7 @@ internal class ResponseFromContextTest {
             )
         )
 
-        val context = TransportContext()
-        context.commonContext.request = request
-        context.messagingContext.setRequest(request)
-
+        val context = TransportContext().setRequest(request)
         val response = CreateChannelMessageResponse().fromContext(context)
 
         assertNotNull(response.responseId)
@@ -73,10 +70,7 @@ internal class ResponseFromContextTest {
             messageId = UUID.randomUUID().toString()
         )
 
-        val context = TransportContext()
-        context.commonContext.request = request
-        context.messagingContext.setRequest(request)
-
+        val context = TransportContext().setRequest(request)
         val response = DeleteChannelMessageResponse().fromContext(context)
 
         assertNotNull(response.responseId)
@@ -113,10 +107,7 @@ internal class ResponseFromContextTest {
             messageId = UUID.randomUUID().toString()
         )
 
-        val context = TransportContext()
-        context.commonContext.request = request
-        context.messagingContext.setRequest(request)
-
+        val context = TransportContext().setRequest(request)
         val response = EditChannelMessageResponse().fromContext(context)
 
         assertNotNull(response.responseId)
@@ -170,9 +161,7 @@ internal class ResponseFromContextTest {
             )
         )
 
-        val context = TransportContext()
-        context.commonContext.request = request
-        context.messagingContext.setRequest(request)
+        val context = TransportContext().setRequest(request)
         context.messagingContext.messages = messages
 
         val response = GetChannelMessageResponse().fromContext(context)

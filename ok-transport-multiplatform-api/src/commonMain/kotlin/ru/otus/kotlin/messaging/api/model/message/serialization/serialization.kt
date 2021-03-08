@@ -11,7 +11,7 @@ import ru.otus.kotlin.messaging.api.model.common.Request
 import ru.otus.kotlin.messaging.api.model.common.Response
 import ru.otus.kotlin.messaging.api.model.message.*
 
-private val requestResponseSerializersModules = SerializersModule {
+val requestResponseSerializersModules = SerializersModule {
 
     fun PolymorphicModuleBuilder<AbstractRequest>.registerProjectSubclasses() {
         subclass(CreateChannelMessageRequest::class)

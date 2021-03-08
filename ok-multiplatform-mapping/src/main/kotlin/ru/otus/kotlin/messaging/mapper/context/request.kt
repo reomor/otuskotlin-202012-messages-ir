@@ -1,15 +1,42 @@
 package ru.otus.kotlin.messaging.mapper.context
 
 import ru.otus.kotlin.messaging.*
+import ru.otus.kotlin.messaging.ChannelType
+import ru.otus.kotlin.messaging.api.model.common.Request
 import ru.otus.kotlin.messaging.api.model.message.CreateChannelMessageRequest
 import ru.otus.kotlin.messaging.api.model.message.DeleteChannelMessageRequest
 import ru.otus.kotlin.messaging.api.model.message.EditChannelMessageRequest
 import ru.otus.kotlin.messaging.api.model.message.GetChannelMessageRequest
+import ru.otus.kotlin.messaging.api.model.message.dto.ChannelMessageDto
 import ru.otus.kotlin.messaging.context.MessagingContext
-import ru.otus.kotlin.messaging.openapi.channel.models.CreateChannelRequest
-import ru.otus.kotlin.messaging.openapi.channel.models.DeleteChannelRequest
-import ru.otus.kotlin.messaging.openapi.channel.models.GetChannelRequest
+import ru.otus.kotlin.messaging.openapi.channel.models.*
+import java.lang.IllegalArgumentException
 import java.util.*
+
+inline fun <reified T : Request> TransportContext.setRequest(request: T): TransportContext {
+    commonContext.request = request
+    messagingContext = MessagingContext()
+    when (T::class) {
+        CreateChannelMessageRequest::class -> messagingContext.setRequest(request as CreateChannelMessageRequest)
+        DeleteChannelMessageRequest::class -> messagingContext.setRequest(request as DeleteChannelMessageRequest)
+        EditChannelMessageRequest::class -> messagingContext.setRequest(request as EditChannelMessageRequest)
+        GetChannelMessageRequest::class -> messagingContext.setRequest(request as GetChannelMessageRequest)
+        else -> throw IllegalArgumentException("Class: ${T::class.simpleName} is not supported")
+    }
+    return this
+}
+
+inline fun <reified T : BaseMessage> TransportContext.setRequest(request: T): TransportContext {
+    openApiContext.request = request
+    messagingContext = MessagingContext()
+    when (T::class) {
+        CreateChannelRequest::class -> messagingContext.setRequest(request as CreateChannelRequest)
+        DeleteChannelRequest::class -> messagingContext.setRequest(request as DeleteChannelRequest)
+        GetChannelRequest::class -> messagingContext.setRequest(request as GetChannelRequest)
+        else -> throw IllegalArgumentException("Class: ${T::class.simpleName} is not supported")
+    }
+    return this
+}
 
 fun MessagingContext.setRequest(request: CreateChannelMessageRequest) {
     request.data?.let { channelMessageDto ->
@@ -99,3 +126,24 @@ fun MessagingContext.setRequest(request: GetChannelRequest) {
         filter.pageSize?.let { page = page.copy(pageSize = it) }
     }
 }
+
+//private val handleMessage: (ChannelMessageDto) -> ChannelMessageDto = { channelMessageDto ->
+//    channelMessageDto.apply {
+//        when {
+//            profileIdTo != null -> this@setRequest.instantMessage = InstantMessage(
+//                id = MessageId(UUID.randomUUID().toString()),
+//                profileIdFrom = profileIdFrom?.let { ProfileId(it) } ?: ProfileId.NONE,
+//                profileIdTo = profileIdTo?.let { ProfileId(it) } ?: ProfileId.NONE,
+//                messageText = messageText ?: "",
+//                resourceLinks = resourceLinks
+//            )
+//            channelId != null -> this@setRequest.channelMessage = ChannelMessage(
+//                id = MessageId(UUID.randomUUID().toString()),
+//                profileIdFrom = profileIdFrom?.let { ProfileId(it) } ?: ProfileId.NONE,
+//                channelId = channelId?.let { ChannelId(it) } ?: ChannelId.NONE,
+//                messageText = messageText ?: "",
+//                resourceLinks = resourceLinks
+//            )
+//        }
+//    }
+//}
