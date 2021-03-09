@@ -65,4 +65,56 @@ internal class ChannelControllerTest {
         assertEquals(channel, responseBody?.channel)
         assertEquals(request, responseBody?.request)
     }
+
+    @Test
+    fun deleteChannel() {
+
+        val request: BaseMessage = DeleteChannelRequest(
+            type = "CreateChannelRequest",
+            requestId = UUID.randomUUID().toString(),
+            requestTime = LocalDateTime.now().toString(),
+            channelId = UUID.randomUUID().toString()
+        )
+
+        val responseBody = client
+            .post()
+            .uri(ChannelApi.deleteChannelUri)
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .bodyValue(request)
+            .exchange()
+            .expectStatus().is2xxSuccessful
+            .expectBody<DeleteChannelResponse>()
+            .returnResult()
+            .responseBody
+
+        assertEquals(request, responseBody?.request)
+    }
+
+    @Test
+    fun getChannel() {
+
+        val request: BaseMessage = GetChannelRequest(
+            type = "CreateChannelRequest",
+            requestId = UUID.randomUUID().toString(),
+            requestTime = LocalDateTime.now().toString(),
+            filter = ChannelFilterDto(
+                channelIds = listOf(
+                    UUID.randomUUID().toString()
+                )
+            )
+        )
+
+        val responseBody = client
+            .post()
+            .uri(ChannelApi.getChannelUri)
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .bodyValue(request)
+            .exchange()
+            .expectStatus().is2xxSuccessful
+            .expectBody<GetChannelResponse>()
+            .returnResult()
+            .responseBody
+
+        assertEquals(request, responseBody?.request)
+    }
 }

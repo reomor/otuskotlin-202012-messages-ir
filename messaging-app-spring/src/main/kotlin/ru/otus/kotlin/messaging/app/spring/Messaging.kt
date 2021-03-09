@@ -11,8 +11,7 @@ import ru.otus.kotlin.messaging.app.spring.controller.ChannelController
 import ru.otus.kotlin.messaging.app.spring.controller.MessagingController
 import ru.otus.kotlin.messaging.mapper.openapi.generalRequestResponseSerializer
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
-import ru.otus.kotlin.messaging.app.spring.serialization.CreateChannelRequestJsonDeserializer
-import ru.otus.kotlin.messaging.app.spring.serialization.CreateChannelResponseJsonDeserializer
+import ru.otus.kotlin.messaging.app.spring.serialization.*
 import ru.otus.kotlin.messaging.openapi.channel.models.BaseMessage
 
 object MessagingApi {
@@ -41,6 +40,10 @@ val app = webApplication {
             val mapper = Jackson2ObjectMapperBuilder()
                 .deserializerByType(BaseMessage::class.java, CreateChannelRequestJsonDeserializer)
                 .deserializerByType(BaseMessage::class.java, CreateChannelResponseJsonDeserializer)
+                .deserializerByType(BaseMessage::class.java, DeleteChannelRequestJsonDeserializer)
+                .deserializerByType(BaseMessage::class.java, DeleteChannelResponseJsonDeserializer)
+                .deserializerByType(BaseMessage::class.java, GetChannelRequestJsonDeserializer)
+                .deserializerByType(BaseMessage::class.java, GetChannelResponseJsonDeserializer)
                 .build<ObjectMapper>()
                 .registerModule(KotlinModule())
             MappingJackson2HttpMessageConverter(mapper)
