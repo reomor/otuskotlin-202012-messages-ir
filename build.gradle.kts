@@ -3,12 +3,6 @@ plugins {
     kotlin("jvm") apply false
 
     id("org.openapi.generator") apply false
-    jacoco
-}
-
-jacoco {
-    val jacocoVersion: String by project
-    toolVersion = jacocoVersion
 }
 
 group = "ru.otus.kotlin.messaging"
@@ -23,4 +17,3 @@ subprojects {
         mavenCentral()
     }
 }
-

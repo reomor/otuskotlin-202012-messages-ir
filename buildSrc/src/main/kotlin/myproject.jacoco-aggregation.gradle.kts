@@ -7,6 +7,11 @@ repositories {
     jcenter()
 }
 
+jacoco {
+    val jacocoVersion: String by project
+    toolVersion = jacocoVersion
+}
+
 // A resolvable configuration to collect source code
 val sourcesPath: Configuration by configurations.creating {
     isVisible = false

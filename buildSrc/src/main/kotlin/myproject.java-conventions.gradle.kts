@@ -10,6 +10,11 @@ repositories {
     jcenter()
 }
 
+jacoco {
+    val jacocoVersion: String by project
+    toolVersion = jacocoVersion
+}
+
 tasks.test {
     useJUnitPlatform()
 }
