@@ -1,4 +1,5 @@
 plugins {
+    id("myproject.java-conventions")
     id("io.spring.dependency-management")
     id("org.springframework.boot")
     kotlin("jvm")

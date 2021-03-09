@@ -17,6 +17,15 @@ jacoco {
 
 tasks.test {
     useJUnitPlatform()
+//    jacoco {
+//        includes.addAll(
+//            listOf(
+//                "ru.otus.kotlin.**",
+//                "**/ru/otus/kotlin/**",
+//                "**otus**"
+//            )
+//        )
+//    }
 }
 
 dependencies {
@@ -41,7 +50,6 @@ configurations.create("transitiveSourcesElements") {
         attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named("source-folders"))
     }
     sourceSets.main.get().java.srcDirs.forEach {
-        println(it.path)
         outgoing.artifact(it)
     }
 }
