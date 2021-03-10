@@ -4,26 +4,27 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.PolymorphicModuleBuilder
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
 import ru.otus.kotlin.messaging.api.model.common.AbstractRequest
 import ru.otus.kotlin.messaging.api.model.common.AbstractResponse
 import ru.otus.kotlin.messaging.api.model.common.Request
 import ru.otus.kotlin.messaging.api.model.common.Response
 import ru.otus.kotlin.messaging.api.model.message.*
 
-private val requestResponseSerializersModules = SerializersModule {
+val requestResponseSerializersModules = SerializersModule {
 
     fun PolymorphicModuleBuilder<AbstractRequest>.registerProjectSubclasses() {
-        subclass(CreateChannelMessageRequest::class, CreateChannelMessageRequest.serializer())
-        subclass(DeleteChannelMessageRequest::class, DeleteChannelMessageRequest.serializer())
-        subclass(EditChannelMessageRequest::class, EditChannelMessageRequest.serializer())
-        subclass(GetChannelMessageRequest::class, GetChannelMessageRequest.serializer())
+        subclass(CreateChannelMessageRequest::class)
+        subclass(DeleteChannelMessageRequest::class)
+        subclass(EditChannelMessageRequest::class)
+        subclass(GetChannelMessageRequest::class)
     }
 
     fun PolymorphicModuleBuilder<AbstractResponse>.registerProjectSubclasses() {
-        subclass(CreateChannelMessageResponse::class, CreateChannelMessageResponse.serializer())
-        subclass(DeleteChannelMessageResponse::class, DeleteChannelMessageResponse.serializer())
-        subclass(EditChannelMessageResponse::class, EditChannelMessageResponse.serializer())
-        subclass(GetChannelMessageResponse::class, GetChannelMessageResponse.serializer())
+        subclass(CreateChannelMessageResponse::class)
+        subclass(DeleteChannelMessageResponse::class)
+        subclass(EditChannelMessageResponse::class)
+        subclass(GetChannelMessageResponse::class)
     }
 
     polymorphic(Request::class) { registerProjectSubclasses() }
@@ -32,9 +33,11 @@ private val requestResponseSerializersModules = SerializersModule {
     polymorphic(AbstractResponse::class) { registerProjectSubclasses() }
 }
 
-val requestResponseSerializer = Json {
-    prettyPrint = true
-    ignoreUnknownKeys = true
-    serializersModule = requestResponseSerializersModules
-    classDiscriminator = "type"
+val requestResponseSerializer: Json by lazy {
+    Json {
+        prettyPrint = true
+        ignoreUnknownKeys = true
+        serializersModule = requestResponseSerializersModules
+        classDiscriminator = "type"
+    }
 }
