@@ -14,13 +14,17 @@ import ru.otus.kotlin.messaging.api.model.common.error.CommonErrorDto
 import ru.otus.kotlin.messaging.api.model.message.CreateChannelMessageRequest
 import ru.otus.kotlin.messaging.api.model.message.CreateChannelMessageResponse
 import ru.otus.kotlin.messaging.api.model.message.serialization.requestResponseSerializer
+import ru.otus.kotlin.messaging.app.ktor.service.ChannelService
 import ru.otus.kotlin.messaging.app.ktor.service.MessagingService
+import ru.otus.kotlin.messaging.mapper.openapi.generalRequestResponseSerializer
+import ru.otus.kotlin.messaging.openapi.channel.models.*
 
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
 
     val messagingService = MessagingService()
+    val channelService = ChannelService()
 
     install(CORS) {
         method(HttpMethod.Options)
@@ -36,7 +40,7 @@ fun Application.module(testing: Boolean = false) {
     install(ContentNegotiation) {
         json(
             contentType = ContentType.Application.Json,
-            json = requestResponseSerializer
+            json = generalRequestResponseSerializer
         )
     }
 
@@ -59,6 +63,27 @@ fun Application.module(testing: Boolean = false) {
                             status = CommonResponseStatus.BAD_REQUEST,
                             errors = listOf(
                                 CommonErrorDto(
+                                    message = e.localizedMessage
+                                )
+                            )
+                        )
+                    )
+                }
+            }
+        }
+
+        route(ChannelApi.baseUri) {
+            post(ChannelApi.createChannelUri) {
+                try {
+                    val request = call.receive<CreateChannelRequest>()
+                    val response = channelService.create(request)
+                    call.respond(response)
+                } catch (e: Exception) {
+                    call.respond(
+                        CreateChannelResponse(
+                            status = ResponseStatus.BAD_REQUEST,
+                            errors = listOf(
+                                ErrorDto(
                                     message = e.localizedMessage
                                 )
                             )
