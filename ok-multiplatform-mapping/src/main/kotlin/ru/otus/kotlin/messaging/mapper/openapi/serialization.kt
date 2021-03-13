@@ -14,6 +14,7 @@ import ru.otus.kotlin.messaging.api.model.message.serialization.requestResponseS
 import ru.otus.kotlin.messaging.openapi.channel.models.*
 import java.util.*
 
+// FIXME models with nullable
 @ExperimentalSerializationApi
 private val openApiRequestResponseSerializersModules = SerializersModule {
     polymorphic(BaseMessage::class) {

@@ -39,26 +39,7 @@ inline fun <reified T : BaseMessage> TransportContext.setRequest(request: T): Tr
 }
 
 fun MessagingContext.setRequest(request: CreateChannelMessageRequest) {
-    request.data?.let { channelMessageDto ->
-        channelMessageDto.apply {
-            when {
-                profileIdTo != null -> this@setRequest.instantMessage = InstantMessage(
-                    id = MessageId(UUID.randomUUID().toString()),
-                    profileIdFrom = profileIdFrom?.let { ProfileId(it) } ?: ProfileId.NONE,
-                    profileIdTo = profileIdTo?.let { ProfileId(it) } ?: ProfileId.NONE,
-                    messageText = messageText ?: "",
-                    resourceLinks = resourceLinks
-                )
-                channelId != null -> this@setRequest.channelMessage = ChannelMessage(
-                    id = MessageId(UUID.randomUUID().toString()),
-                    profileIdFrom = profileIdFrom?.let { ProfileId(it) } ?: ProfileId.NONE,
-                    channelId = channelId?.let { ChannelId(it) } ?: ChannelId.NONE,
-                    messageText = messageText ?: "",
-                    resourceLinks = resourceLinks
-                )
-            }
-        }
-    }
+    request.data?.let { channelMessageDto -> handleMessage(channelMessageDto) }
 }
 
 fun MessagingContext.setRequest(request: DeleteChannelMessageRequest) {
@@ -67,30 +48,9 @@ fun MessagingContext.setRequest(request: DeleteChannelMessageRequest) {
 }
 
 fun MessagingContext.setRequest(request: EditChannelMessageRequest) {
-    request.messageId?.let { messageId ->
-        messageIds = listOf(MessageId(messageId))
-        request.channelId?.let { channelId = ChannelId(it) }
-        request.data?.let { channelMessageDto ->
-            channelMessageDto.apply {
-                when {
-                    profileIdTo != null -> this@setRequest.instantMessage = InstantMessage(
-                        id = MessageId(UUID.randomUUID().toString()),
-                        profileIdFrom = profileIdFrom?.let { ProfileId(it) } ?: ProfileId.NONE,
-                        profileIdTo = profileIdTo?.let { ProfileId(it) } ?: ProfileId.NONE,
-                        messageText = messageText ?: "",
-                        resourceLinks = resourceLinks
-                    )
-                    channelId != null -> this@setRequest.channelMessage = ChannelMessage(
-                        id = MessageId(UUID.randomUUID().toString()),
-                        profileIdFrom = profileIdFrom?.let { ProfileId(it) } ?: ProfileId.NONE,
-                        channelId = channelId?.let { ChannelId(it) } ?: ChannelId.NONE,
-                        messageText = messageText ?: "",
-                        resourceLinks = resourceLinks
-                    )
-                }
-            }
-        }
-    }
+    request.messageId?.let { messageId -> messageIds = listOf(MessageId(messageId)) }
+    request.channelId?.let { channelId = ChannelId(it) }
+    request.data?.let { channelMessageDto -> handleMessage(channelMessageDto) }
 }
 
 fun MessagingContext.setRequest(request: GetChannelMessageRequest) {
@@ -127,23 +87,24 @@ fun MessagingContext.setRequest(request: GetChannelRequest) {
     }
 }
 
-//private val handleMessage: (ChannelMessageDto) -> ChannelMessageDto = { channelMessageDto ->
-//    channelMessageDto.apply {
-//        when {
-//            profileIdTo != null -> this@setRequest.instantMessage = InstantMessage(
-//                id = MessageId(UUID.randomUUID().toString()),
-//                profileIdFrom = profileIdFrom?.let { ProfileId(it) } ?: ProfileId.NONE,
-//                profileIdTo = profileIdTo?.let { ProfileId(it) } ?: ProfileId.NONE,
-//                messageText = messageText ?: "",
-//                resourceLinks = resourceLinks
-//            )
-//            channelId != null -> this@setRequest.channelMessage = ChannelMessage(
-//                id = MessageId(UUID.randomUUID().toString()),
-//                profileIdFrom = profileIdFrom?.let { ProfileId(it) } ?: ProfileId.NONE,
-//                channelId = channelId?.let { ChannelId(it) } ?: ChannelId.NONE,
-//                messageText = messageText ?: "",
-//                resourceLinks = resourceLinks
-//            )
-//        }
-//    }
-//}
+private fun MessagingContext.handleMessage(channelMessageDto: ChannelMessageDto) {
+    return channelMessageDto.run {
+        when {
+            profileIdTo != null -> this@handleMessage.instantMessage = InstantMessage(
+                id = MessageId(UUID.randomUUID().toString()),
+                profileIdFrom = profileIdFrom?.let { ProfileId(it) } ?: ProfileId.NONE,
+                profileIdTo = profileIdTo?.let { ProfileId(it) } ?: ProfileId.NONE,
+                messageText = messageText ?: "",
+                resourceLinks = resourceLinks
+            )
+            channelId != null -> this@handleMessage.channelMessage = ChannelMessage(
+                id = MessageId(UUID.randomUUID().toString()),
+                profileIdFrom = profileIdFrom?.let { ProfileId(it) } ?: ProfileId.NONE,
+                channelId = channelId?.let { ChannelId(it) } ?: ChannelId.NONE,
+                messageText = messageText ?: "",
+                resourceLinks = resourceLinks
+            )
+            else -> throw IllegalArgumentException("Message without an addressee")
+        }
+    }
+}
