@@ -42,3 +42,5 @@ jobs:
             -Dsonar.projectKey=reomor_otuskotlin-202012-messages-ir
             -Dsonar.coverage.jacoco.xmlReportPaths=code-coverage-report/build/reports/jacoco/codeCoverageReport/codeCoverageReport.xml
             -Dsonar.verbose=true
+            -Dsonar.exclusions=**/src/test/**/*
+            -Dsonar.test.inclusions=**/src/test/**/*
