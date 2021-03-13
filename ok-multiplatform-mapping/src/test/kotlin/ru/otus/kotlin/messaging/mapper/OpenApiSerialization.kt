@@ -237,6 +237,49 @@ internal class OpenApiSerialization {
     }
 
     @Test
+    fun testErrorCreateChannelResponseSerialization() {
+
+        val channel = ChannelDto(
+            id = UUID.randomUUID().toString(),
+            name = "channelName",
+            ownerId = UUID.randomUUID().toString(),
+            type = ChannelType.PUBLIC_CHANNEL
+        )
+
+        val request = CreateChannelRequest(
+            type = "CreateChannelRequest",
+            requestId = UUID.randomUUID().toString(),
+            requestTime = LocalDateTime.now().toString(),
+            channel = channel
+        )
+
+        val expected = CreateChannelResponse(
+            type = "CreateChannelResponse",
+            responseId = UUID.randomUUID().toString(),
+            responseTime = LocalDateTime.now().toString(),
+            errors = listOf(
+                ErrorDto(
+                    code = "666",
+                    level = ErrorSeverity.INFO,
+                    message = "info message"
+                ),
+                ErrorDto(
+                    code = "777",
+                    level = ErrorSeverity.FATAL,
+                    message = "fatal message"
+                ),
+            ),
+            status = ResponseStatus.BAD_REQUEST,
+            request = request
+        )
+
+        val encodeToString = generalRequestResponseSerializer.encodeToString(expected)
+        val actual = generalRequestResponseSerializer.decodeFromString<CreateChannelResponse>(encodeToString)
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
     fun testDeleteChannelRequestSerialization() {
 
         // doesn't matter polymorphic doesn't work
