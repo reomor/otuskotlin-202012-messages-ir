@@ -35,7 +35,7 @@ val generalRequestResponseSerializer: Json by lazy {
         prettyPrint = true
 //        isLenient = true
         ignoreUnknownKeys = true
-        serializersModule = requestResponseSerializersModules.plus(openApiRequestResponseSerializersModules)
+        serializersModule = requestResponseSerializersModules + openApiRequestResponseSerializersModules
         classDiscriminator = "type"
     }
 }

@@ -1,9 +1,20 @@
 # otuskotlin-202012-messages-ir
 202012, Личные сообщения, Ионин Рэм
 
+## Description
+
+Course educational project written in Kotlin. 
+It's planned to develop project on agnostic-principles: 
+- framework-agnostic
+- base-agnostic
+- transport models
+
 ## Stack 
 
 - Kotlin 1.4.30
+- Spring/Kofu
+- Ktor
+- Kotless
 - Kotlin multiplatform
 - Kotlin serialization
 - OpenApi 5 / Generator
@@ -14,11 +25,6 @@
 
 - [Code coverage](https://codecov.io/gh/reomor/otuskotlin-202012-messages-ir/)
 - [CloudSonar](https://sonarcloud.io/dashboard?id=reomor_otuskotlin-202012-messages-ir)
-
-## Branches
-- [DSL](https://github.com/reomor/otuskotlin-202012-messages-ir/tree/usefull-stuff)
-- [hw01](https://github.com/reomor/otuskotlin-202012-messages-ir/tree/m2-init-project)
-- [hw02](https://github.com/reomor/otuskotlin-202012-messages-ir/tree/hw02-transport-models)
 
 ## Homework
 
@@ -35,3 +41,8 @@
 - Validation
 - Inner layer models
 - Model mapping
+
+### hw03
+
+- Framework subproject
+- Controller stubs

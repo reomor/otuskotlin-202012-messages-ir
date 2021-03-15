@@ -11,7 +11,8 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":messaging-app-spring"))
+//    implementation(project(":messaging-app-spring"))
+    implementation(project(":messaging-app-ktor"))
     implementation(project(":ok-common-backend"))
     implementation(project(":ok-common-multiplatform"))
     implementation(project(":ok-multiplatform-mapping"))
@@ -21,4 +22,7 @@ tasks {
     "bootJar"(BootJar::class) {
         enabled = false
     }
+//    "jar"(Jar::class) {
+//        enabled = true
+//    }
 }
