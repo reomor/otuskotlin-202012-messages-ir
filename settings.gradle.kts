@@ -7,7 +7,8 @@ include(
     "ok-transport-openapi",
     "ok-multiplatform-mapping",
     "messaging-app-spring",
-    "messaging-app-ktor"
+    "messaging-app-ktor",
+    "messaging-app-kotless"
 )
 
 // reporting utility projects
@@ -19,6 +20,7 @@ pluginManagement{
     val openapiVersion: String by settings
     val springDependencyManagement: String by settings
     val springBootVersion: String by settings
+    val kotlessVersion: String by settings
 
     plugins {
         kotlin("jvm") version kotlinVersion apply false
@@ -29,5 +31,6 @@ pluginManagement{
         id("org.openapi.generator") version openapiVersion apply false
         id("io.spring.dependency-management") version springDependencyManagement
         id("org.springframework.boot") version springBootVersion
+        id("io.kotless") version kotlessVersion apply false
     }
 }

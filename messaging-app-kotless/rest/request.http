@@ -1,0 +1,16 @@
+POST http://{{url}}/message/get
+Content-Type: application/json
+
+{
+  "requestId" : "123456",
+  "requestTime": "2018-07-14T17:45:55.9483536",
+  "filter": {
+    "profileIdFrom": "p1",
+    "profileIdTo": "p2",
+    "channelId": "c3",
+    "pageSize": 50,
+    "pageNumber": 0
+  }
+}
+
+###
