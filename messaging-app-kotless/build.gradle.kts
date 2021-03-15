@@ -1,3 +1,5 @@
+import io.kotless.plugin.gradle.dsl.KotlessConfig.Optimization.Autowarm
+import io.kotless.plugin.gradle.dsl.Webapp.Route53
 import io.kotless.plugin.gradle.dsl.kotless
 
 plugins {
@@ -26,28 +28,30 @@ kotless {
 
     config {
 
-        bucket = "ru.otus.kotlin.messaging"
+        bucket = "ru.kotless.messaging"
+//        prefix = "dev"
 
         dsl {
             type = io.kotless.DSLType.Kotless
         }
 
         terraform {
-            profile = "messaging"
-            region = "eu-north-1"
+            profile = "kotless"
+            region = "us-east-1"
+            version = "0.13.6"
         }
 
         optimization {
-            autowarm = io.kotless.plugin.gradle.dsl.KotlessConfig.Optimization.Autowarm(enable = false, minutes = -1)
+            autowarm = Autowarm(enable = false, minutes = -1)
         }
     }
 
     webapp {
 
-        route53 = io.kotless.plugin.gradle.dsl.Webapp.Route53(
+        route53 = Route53(
             "messaging",
-            "rem.kotlin.otus.com",
-            "rem.kotlin.otus.com"
+            "ioninremlabs.com",
+            "ioninremlabs.com"
         )
 
         lambda {
@@ -62,6 +66,16 @@ kotless {
         }
         terraform {
             allowDestroy = true
+        }
+    }
+}
+
+tasks {
+
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions {
+            freeCompilerArgs = listOf("-Xjsr305=strict")
+            jvmTarget = "11"
         }
     }
 }
