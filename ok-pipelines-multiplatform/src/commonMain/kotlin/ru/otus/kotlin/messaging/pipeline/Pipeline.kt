@@ -1,15 +1,15 @@
 package ru.otus.kotlin.messaging.pipeline
 
-class Operation<T> private constructor(
+class Pipeline<T> private constructor(
     private val checkPrecondition: T.() -> Boolean,
-    private val runOperation: T.() -> Unit,
+    private val operations: List<IOperation<T>>,
     private val handleEx: T.(Throwable) -> Unit
 ) : IOperation<T> {
 
     override suspend fun execute(context: T) {
         try {
-            if (checkPrecondition(context)) {
-                return runOperation.invoke(context)
+            if (checkPrecondition.invoke(context)) {
+                operations.forEach { operation -> operation.execute(context) }
             }
         } catch (e: Exception) {
             handleEx.invoke(context, e)
@@ -19,21 +19,21 @@ class Operation<T> private constructor(
     class Builder<T> : IOperationBuilder<T> {
 
         private var checkPrecondition: T.() -> Boolean = { true }
-        private var runOperation: T.() -> Unit = { }
+        private var operations: MutableList<IOperation<T>> = mutableListOf()
         private var handleEx: T.(Throwable) -> Unit = { e -> throw e }
 
-        fun startIf(block: T.() -> Boolean) {
+        fun startIf(block: T.() -> Boolean): Unit {
             checkPrecondition = block
         }
 
-        fun execute(block: T.() -> Unit) {
-            runOperation = block
+        fun execute(operation: Operation<T>): Unit {
+            operations.add(operation)
         }
 
-        fun onError(block: T.(Throwable) -> Unit) {
+        fun onError(block: T.(Throwable) -> Unit): Unit {
             handleEx = block
         }
 
-        override fun build(): Operation<T> = Operation(checkPrecondition, runOperation, handleEx)
+        override fun build(): Pipeline<T> = Pipeline(checkPrecondition, operations, handleEx)
     }
 }
