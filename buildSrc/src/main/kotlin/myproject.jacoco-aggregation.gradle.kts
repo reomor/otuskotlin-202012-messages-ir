@@ -46,7 +46,8 @@ val codeCoverageReport by tasks.registering(JacocoReport::class) {
         .asFileTree
         .filter { file -> file.isFile && file.path.contains(projectDir.parent) }
     matching.forEach { file -> println(file.path) }
-    additionalClassDirs(matching)
+    // 20.03.2021 fixme
+    //additionalClassDirs(matching)
 
     println("jacoco source dirs:")
     val files = sourcesPath.incoming.artifactView { lenient(true) }

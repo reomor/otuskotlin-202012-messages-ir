@@ -18,7 +18,9 @@ kotlin {
 
         val commonMain by getting {
             dependencies {
-                implementation(kotlin("stdlib"))
+                implementation(project(":ok-common-multiplatform"))
+
+                implementation(kotlin("stdlib-common"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
             }
         }
@@ -31,7 +33,7 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
-                implementation(kotlin("stdlib-jdk8"))
+                implementation(kotlin("stdlib"))
             }
         }
         val jvmTest by getting {
@@ -56,6 +58,6 @@ kotlin {
     }
 }
 
-tasks.withType<Test> {
+tasks.withType<Test>() {
     useJUnitPlatform()
 }

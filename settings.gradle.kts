@@ -8,7 +8,8 @@ include(
     "ok-multiplatform-mapping",
     "messaging-app-spring",
     "messaging-app-ktor",
-    "messaging-app-kotless"
+    "messaging-app-kotless",
+    "ok-pipelines-multiplatform"
 )
 
 // reporting utility projects
