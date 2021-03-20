@@ -26,8 +26,12 @@ class Pipeline<T> private constructor(
             checkPrecondition = block
         }
 
-        fun execute(operation: Operation<T>): Unit {
+        fun execute(operation: IOperation<T>): Unit {
             operations.add(operation)
+        }
+
+        fun execute(block: T.() -> Unit) {
+            execute(Operation.Builder<T>().apply{ execute(block) }.build())
         }
 
         fun onError(block: T.(Throwable) -> Unit): Unit {

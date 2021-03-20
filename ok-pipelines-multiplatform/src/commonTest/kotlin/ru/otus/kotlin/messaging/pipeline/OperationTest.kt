@@ -26,34 +26,128 @@ internal class OperationTest {
     }
 
     @Test
-    fun pipelineTest() {
+    fun simplePipelineTest() {
 
         val context = TestContext("a")
 
-        val aOperation = operation<TestContext> {
+        val bOperation = operation<TestContext> {
             execute {
                 str += "b"
             }
         }
 
         val pipeline = pipeline<TestContext> {
-            execute(aOperation)
-            execute(operation {
+            execute(bOperation)
+            operation {
                 execute {
                     str += "c"
                 }
-            })
-            execute(operation {
+            }
+            operation {
                 startIf { false }
                 execute {
                     str += "c"
                 }
-            })
+            }
         }
 
         runBlockingTest {
             pipeline.execute(context)
             assertEquals("abc", context.str)
+        }
+    }
+
+    @Test
+    fun pipelineTest() {
+
+        val context = TestContext("a")
+
+        val bOperation = operation<TestContext> {
+            execute {
+                str += "b"
+            }
+        }
+
+        val pipeline = pipeline<TestContext> {
+            execute(bOperation)
+            execute { str += "c" }
+            operation {
+                startIf { false }
+                execute {
+                    str += "c"
+                }
+            }
+        }
+
+        runBlockingTest {
+            pipeline.execute(context)
+            assertEquals("abc", context.str)
+        }
+    }
+
+    @Test
+    fun nestedPipelineTest() {
+
+        val context = TestContext("a")
+
+        val bOperation = operation<TestContext> {
+            execute {
+                str += "b"
+            }
+        }
+
+        val pipeline = pipeline<TestContext> {
+            execute(bOperation)
+            execute { str += "c" }
+            operation {
+                startIf { false }
+                execute {
+                    str += "c"
+                }
+            }
+            pipeline {
+                execute(bOperation)
+                operation {
+                    startIf { false }
+                    execute {
+                        str = ""
+                    }
+                }
+                pipeline {
+                    operation {
+                        execute {
+                            str += "a"
+                        }
+                    }
+                }
+            }
+        }
+
+        runBlockingTest {
+            pipeline.execute(context)
+            assertEquals("abcba", context.str)
+        }
+    }
+
+    @Test
+    fun pipelineExceptionTest() {
+
+        val context = TestContext("")
+
+        val exOperation = operation<TestContext> {
+            execute {
+                throw IllegalArgumentException("Unexpected exception")
+            }
+            onError { throwable -> println(throwable) }
+        }
+
+        val pipeline = pipeline<TestContext> {
+            execute(exOperation)
+        }
+
+        runBlockingTest {
+            pipeline.execute(context)
+            assertEquals("", context.str)
         }
     }
 }
