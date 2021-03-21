@@ -46,3 +46,9 @@ It's planned to develop project on agnostic-principles:
 
 - Framework subproject
 - Controller stubs
+
+## Additional
+
+```shell
+./gradlew projects --info
+```
