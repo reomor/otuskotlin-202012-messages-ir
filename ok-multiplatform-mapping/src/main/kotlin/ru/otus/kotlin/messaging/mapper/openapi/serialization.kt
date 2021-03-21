@@ -118,7 +118,7 @@ object CreateChannelResponseSerializer : KSerializer<CreateChannelResponse> {
                 descriptor,
                 4,
                 CreateChannelRequestSerializer,
-                value.request as CreateChannelRequest
+                value.request as? CreateChannelRequest
             )
             encodeNullableSerializableElement(descriptor, 5, ChannelDtoSerializer, value.channel)
         }
@@ -129,7 +129,7 @@ object CreateChannelResponseSerializer : KSerializer<CreateChannelResponse> {
 
             var responseId: String? = null
             var responseTime: String? = null
-            var errors: List<ErrorDto> = emptyList()
+            var errors: List<ErrorDto>? = null
             var status: ResponseStatus? = null
             var request: BaseMessage? = null
             var channel: ChannelDto? = null
@@ -227,7 +227,7 @@ object DeleteChannelResponseSerializer : KSerializer<DeleteChannelResponse> {
                 descriptor,
                 4,
                 DeleteChannelRequestSerializer,
-                value.request as DeleteChannelRequest
+                value.request as? DeleteChannelRequest
             )
             encodeNullableSerializableElement(descriptor, 5, ChannelDtoSerializer, value.channel)
         }
@@ -238,7 +238,7 @@ object DeleteChannelResponseSerializer : KSerializer<DeleteChannelResponse> {
 
             var responseId: String? = null
             var responseTime: String? = null
-            var errors: List<ErrorDto> = emptyList()
+            var errors: List<ErrorDto>? = null
             var status: ResponseStatus? = null
             var request: BaseMessage? = null
             var channel: ChannelDto? = null
@@ -337,7 +337,7 @@ object GetChannelResponseSerializer : KSerializer<GetChannelResponse> {
                 descriptor,
                 4,
                 GetChannelRequestSerializer,
-                value.request as GetChannelRequest
+                value.request as? GetChannelRequest
             )
             encodeNullableSerializableElement(descriptor, 5, ListSerializer(ChannelDtoSerializer), value.channels)
         }
@@ -348,10 +348,10 @@ object GetChannelResponseSerializer : KSerializer<GetChannelResponse> {
 
             var responseId: String? = null
             var responseTime: String? = null
-            var errors: List<ErrorDto> = emptyList()
+            var errors: List<ErrorDto>? = null
             var status: ResponseStatus? = null
             var request: BaseMessage? = null
-            var channels: List<ChannelDto> = emptyList()
+            var channels: List<ChannelDto>? = null
 
             while (true) {
                 when (val index = decodeElementIndex(descriptor)) {
