@@ -2,9 +2,8 @@ package ru.otus.kotlin.messaging.app.ktor
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import ru.otus.kotlin.messaging.app.ktor.common.CommonTest.contentType
-import ru.otus.kotlin.messaging.app.ktor.common.CommonTest.contentTypeHeader
 import ru.otus.kotlin.messaging.app.ktor.service.ChannelService
 import ru.otus.kotlin.messaging.mapper.openapi.*
 import ru.otus.kotlin.messaging.openapi.channel.models.*
@@ -30,7 +29,7 @@ internal class ChannelTest {
                         request as CreateChannelRequest
                     )
                 )
-                addHeader(contentTypeHeader, contentType)
+                addHeader(HttpHeaders.ContentType, contentType)
             }.apply {
 
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -66,7 +65,7 @@ internal class ChannelTest {
                         request as DeleteChannelRequest
                     )
                 )
-                addHeader(contentTypeHeader, contentType)
+                addHeader(HttpHeaders.ContentType, contentType)
             }.apply {
 
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -106,7 +105,7 @@ internal class ChannelTest {
                         request as GetChannelRequest
                     )
                 )
-                addHeader(contentTypeHeader, contentType)
+                addHeader(HttpHeaders.ContentType, contentType)
             }.apply {
 
                 assertEquals(HttpStatusCode.OK, response.status())

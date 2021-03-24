@@ -6,6 +6,9 @@ import ru.otus.kotlin.messaging.context.MessagingContext
 import ru.otus.kotlin.messaging.openapi.channel.models.BaseMessage
 
 data class TransportContext(
+    var status: TransportContextStatus = TransportContextStatus.NONE,
+    var stubCase: ContextStubCase = ContextStubCase.NONE,
+
     var messagingContext: MessagingContext = MessagingContext(),
     var commonContext: CommonContext = CommonContext(),
     var openApiContext: OpenApiContext = OpenApiContext()

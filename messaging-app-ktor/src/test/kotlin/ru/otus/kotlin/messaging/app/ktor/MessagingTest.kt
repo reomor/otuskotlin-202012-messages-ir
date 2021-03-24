@@ -2,7 +2,7 @@ package ru.otus.kotlin.messaging.app.ktor
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import ru.otus.kotlin.messaging.api.model.common.AbstractRequest
 import ru.otus.kotlin.messaging.api.model.common.AbstractResponse
 import ru.otus.kotlin.messaging.api.model.message.CreateChannelMessageRequest
@@ -12,16 +12,11 @@ import ru.otus.kotlin.messaging.api.model.message.GetChannelMessageRequest
 import ru.otus.kotlin.messaging.api.model.message.dto.ChannelMessageDto
 import ru.otus.kotlin.messaging.api.model.message.dto.ChannelMessageFilter
 import ru.otus.kotlin.messaging.app.ktor.common.CommonTest.contentType
-import ru.otus.kotlin.messaging.app.ktor.common.CommonTest.contentTypeHeader
 import ru.otus.kotlin.messaging.app.ktor.service.MessagingService
 import ru.otus.kotlin.messaging.mapper.openapi.generalRequestResponseSerializer
-import java.time.LocalDateTime
-import java.util.*
 import kotlin.test.assertEquals
 
 internal class MessagingTest {
-
-
 
     @Test
     fun createMessage() {
@@ -39,7 +34,7 @@ internal class MessagingTest {
 
             handleRequest(HttpMethod.Post, MessagingApi.baseUri + MessagingApi.createMessageUri) {
                 setBody(generalRequestResponseSerializer.encodeToString(AbstractRequest.serializer(), request))
-                addHeader(contentTypeHeader, contentType)
+                addHeader(HttpHeaders.ContentType, contentType)
             }.apply {
 
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -70,7 +65,7 @@ internal class MessagingTest {
 
             handleRequest(HttpMethod.Post, MessagingApi.baseUri + MessagingApi.deleteMessageUri) {
                 setBody(generalRequestResponseSerializer.encodeToString(AbstractRequest.serializer(), request))
-                addHeader(contentTypeHeader, contentType)
+                addHeader(HttpHeaders.ContentType, contentType)
             }.apply {
 
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -102,7 +97,7 @@ internal class MessagingTest {
 
             handleRequest(HttpMethod.Post, MessagingApi.baseUri + MessagingApi.editMessageUri) {
                 setBody(generalRequestResponseSerializer.encodeToString(AbstractRequest.serializer(), request))
-                addHeader(contentTypeHeader, contentType)
+                addHeader(HttpHeaders.ContentType, contentType)
             }.apply {
 
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -137,7 +132,7 @@ internal class MessagingTest {
 
             handleRequest(HttpMethod.Post, MessagingApi.baseUri + MessagingApi.getMessageUri) {
                 setBody(generalRequestResponseSerializer.encodeToString(AbstractRequest.serializer(), request))
-                addHeader(contentTypeHeader, contentType)
+                addHeader(HttpHeaders.ContentType, contentType)
             }.apply {
 
                 assertEquals(HttpStatusCode.OK, response.status())

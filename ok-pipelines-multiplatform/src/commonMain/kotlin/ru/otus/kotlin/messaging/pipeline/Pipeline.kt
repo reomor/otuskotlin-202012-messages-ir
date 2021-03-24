@@ -2,13 +2,13 @@ package ru.otus.kotlin.messaging.pipeline
 
 class Pipeline<T> private constructor(
     private val checkPrecondition: T.() -> Boolean,
-    private val operations: List<IOperation<T>>,
+    private val operations: Collection<IOperation<T>>,
     private val handleEx: T.(Throwable) -> Unit
 ) : IOperation<T> {
 
     override suspend fun execute(context: T) {
         try {
-            if (checkPrecondition.invoke(context)) {
+            if (checkPrecondition(context)) {
                 operations.forEach { operation -> operation.execute(context) }
             }
         } catch (e: Exception) {
@@ -16,6 +16,7 @@ class Pipeline<T> private constructor(
         }
     }
 
+    @PipelineDsl
     class Builder<T> : IOperationBuilder<T> {
 
         private var checkPrecondition: T.() -> Boolean = { true }
@@ -31,7 +32,7 @@ class Pipeline<T> private constructor(
         }
 
         fun execute(block: T.() -> Unit) {
-            execute(Operation.Builder<T>().apply{ execute(block) }.build())
+            execute(Operation.Builder<T>().apply { execute(block) }.build())
         }
 
         fun onError(block: T.(Throwable) -> Unit): Unit {

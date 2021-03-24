@@ -1,5 +1,4 @@
 plugins {
-    id("myproject.java-conventions")
     application
     kotlin("jvm")
 }
@@ -25,6 +24,7 @@ dependencies {
     implementation(project(":ok-common-backend"))
     implementation(project(":ok-transport-multiplatform-api"))
     implementation(project(":ok-transport-openapi"))
+    implementation(project(":ok-be-business-logic"))
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")

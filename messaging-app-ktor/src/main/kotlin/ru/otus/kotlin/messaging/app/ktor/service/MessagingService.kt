@@ -3,15 +3,25 @@ package ru.otus.kotlin.messaging.app.ktor.service
 import ru.otus.kotlin.messaging.api.model.common.Response
 import ru.otus.kotlin.messaging.api.model.message.*
 import ru.otus.kotlin.messaging.api.model.message.dto.ChannelMessageDto
+import ru.otus.kotlin.messaging.business.backend.MessagePipelineService
+import ru.otus.kotlin.messaging.mapper.context.ContextStubCase
 import ru.otus.kotlin.messaging.mapper.context.TransportContext
+import ru.otus.kotlin.messaging.mapper.context.fromContext
 import ru.otus.kotlin.messaging.mapper.context.setRequest
 
-class MessagingService {
+class MessagingService(
+    private val messagePipelineService: MessagePipelineService
+) {
 
     suspend fun create(request: CreateChannelMessageRequest): Response = TransportContext().run {
-        commonContext.request = request
-        messagingContext.setRequest(request)
-        createChannelMessageResponse.copy(request = request)
+        stubCase = ContextStubCase.MESSAGE_CREATE_SUCCESS
+        setRequest(request)
+        messagePipelineService.create(this)
+        CreateChannelMessageResponse().fromContext(
+            transportContext = this,
+            responseId = createChannelMessageResponse.responseId!!,
+            responseTime = createChannelMessageResponse.responseTime!!
+        )
     }
 
     suspend fun delete(request: DeleteChannelMessageRequest): Response = TransportContext().run {
@@ -33,6 +43,8 @@ class MessagingService {
     }
 
     companion object {
+
+        fun emptyResponse(): Nothing = throw IllegalArgumentException("response is not set")
 
         val channelMessageDto = ChannelMessageDto(
             profileIdFrom = "d6a3577b-395a-4772-ba46-77ce6290a991",

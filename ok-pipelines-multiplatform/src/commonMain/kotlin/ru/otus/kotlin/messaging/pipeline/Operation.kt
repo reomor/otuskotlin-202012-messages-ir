@@ -8,14 +8,13 @@ class Operation<T> private constructor(
 
     override suspend fun execute(context: T) {
         try {
-            if (checkPrecondition(context)) {
-                return runOperation.invoke(context)
-            }
+            if (checkPrecondition(context)) runOperation(context)
         } catch (e: Exception) {
-            handleEx.invoke(context, e)
+            handleEx(context, e)
         }
     }
 
+    @PipelineDsl
     class Builder<T> : IOperationBuilder<T> {
 
         private var checkPrecondition: T.() -> Boolean = { true }

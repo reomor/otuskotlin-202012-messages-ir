@@ -9,7 +9,8 @@ include(
     "messaging-app-spring",
     "messaging-app-ktor",
     "messaging-app-kotless",
-    "ok-pipelines-multiplatform"
+    "ok-pipelines-multiplatform",
+    "ok-be-business-logic"
 )
 
 // reporting utility projects

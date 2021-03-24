@@ -12,9 +12,9 @@ import ru.otus.kotlin.messaging.api.model.common.Request
 import ru.otus.kotlin.messaging.api.model.common.dto.CommonResponseStatus
 import ru.otus.kotlin.messaging.api.model.common.error.CommonErrorDto
 import ru.otus.kotlin.messaging.api.model.message.*
-import ru.otus.kotlin.messaging.api.model.message.serialization.requestResponseSerializer
 import ru.otus.kotlin.messaging.app.ktor.service.ChannelService
 import ru.otus.kotlin.messaging.app.ktor.service.MessagingService
+import ru.otus.kotlin.messaging.business.backend.MessagePipelineService
 import ru.otus.kotlin.messaging.mapper.openapi.generalRequestResponseSerializer
 import ru.otus.kotlin.messaging.openapi.channel.models.*
 
@@ -22,7 +22,9 @@ import ru.otus.kotlin.messaging.openapi.channel.models.*
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
 
-    val messagingService = MessagingService()
+    val messagePipelineService = MessagePipelineService()
+
+    val messagingService = MessagingService(messagePipelineService)
     val channelService = ChannelService()
 
     install(CORS) {
@@ -31,7 +33,6 @@ fun Application.module(testing: Boolean = false) {
         method(HttpMethod.Delete)
         method(HttpMethod.Patch)
         header(HttpHeaders.Authorization)
-        header("MyCustomHeader")
         allowCredentials = true
         anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
     }
