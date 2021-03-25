@@ -138,63 +138,29 @@ fun CreateChannelResponse.fromContext(
         )
     }
 
-fun DeleteChannelResponse.toDto(
-    transportContext: TransportContext,
-    responseStatus: CommonResponseStatus = CommonResponseStatus.SUCCESS
-): DeleteChannelResponse =
-    transportContext.addToOpenApiContext(this) { response ->
-        DeleteChannelResponse(
-            responseId = response.responseId,
-            responseTime = response.responseTime,
-            errors = transportContext.messagingContext.errors.toOpenApiErrorDto(),
-            status = ResponseStatus.valueOf(responseStatus.name.toUpperCase()),
-            request = transportContext.openApiContext.request,
-            channel = transportContext.messagingContext.channel.toDto()
-        )
-    }
-
 fun DeleteChannelResponse.fromContext(
     transportContext: TransportContext,
-    responseId: String = UUID.randomUUID().toString(),
-    responseTime: String? = LocalDateTime.now().toString(),
     responseStatus: CommonResponseStatus = CommonResponseStatus.SUCCESS
 ): DeleteChannelResponse =
     transportContext.addToOpenApiContext {
         DeleteChannelResponse(
-            responseId = responseId,
-            responseTime = responseTime,
+            responseId = transportContext.responseId,
+            responseTime = transportContext.responseTime,
             errors = transportContext.messagingContext.errors.toOpenApiErrorDto(),
             status = ResponseStatus.valueOf(responseStatus.name.toUpperCase()),
             request = transportContext.openApiContext.request,
             channel = transportContext.messagingContext.channel.toDto()
-        )
-    }
-
-fun GetChannelResponse.toDto(
-    transportContext: TransportContext,
-    responseStatus: CommonResponseStatus = CommonResponseStatus.SUCCESS
-): GetChannelResponse =
-    transportContext.addToOpenApiContext(this) { response ->
-        GetChannelResponse(
-            responseId = response.responseId,
-            responseTime = response.responseTime,
-            errors = transportContext.messagingContext.errors.toOpenApiErrorDto(),
-            status = ResponseStatus.valueOf(responseStatus.name.toUpperCase()),
-            request = transportContext.openApiContext.request,
-            channels = transportContext.messagingContext.channels.map { it.toDto() }
         )
     }
 
 fun GetChannelResponse.fromContext(
     transportContext: TransportContext,
-    responseId: String = UUID.randomUUID().toString(),
-    responseTime: String? = LocalDateTime.now().toString(),
     responseStatus: CommonResponseStatus = CommonResponseStatus.SUCCESS
 ): GetChannelResponse =
     transportContext.addToOpenApiContext {
         GetChannelResponse(
-            responseId = responseId,
-            responseTime = responseTime,
+            responseId = transportContext.responseId,
+            responseTime = transportContext.responseTime,
             errors = transportContext.messagingContext.errors.toOpenApiErrorDto(),
             status = ResponseStatus.valueOf(responseStatus.name.toUpperCase()),
             request = transportContext.openApiContext.request,

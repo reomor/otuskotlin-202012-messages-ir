@@ -4,8 +4,10 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import org.junit.Test
 import ru.otus.kotlin.messaging.app.ktor.common.CommonTest.contentType
-import ru.otus.kotlin.messaging.app.ktor.service.ChannelService
-import ru.otus.kotlin.messaging.business.backend.operation.stub.Stubs
+import ru.otus.kotlin.messaging.business.backend.operation.stub.ChannelStubs.channelStub
+import ru.otus.kotlin.messaging.business.backend.operation.stub.ChannelStubs.createChannelResponse
+import ru.otus.kotlin.messaging.business.backend.operation.stub.ChannelStubs.deleteChannelResponse
+import ru.otus.kotlin.messaging.business.backend.operation.stub.ChannelStubs.getChannelResponse
 import ru.otus.kotlin.messaging.mapper.context.toDto
 import ru.otus.kotlin.messaging.mapper.openapi.*
 import ru.otus.kotlin.messaging.openapi.channel.models.*
@@ -21,7 +23,7 @@ internal class ChannelTest {
                 type = "CreateChannelRequest",
                 requestId = "c11dcf66-57fa-495b-af21-162a6dfcbffa",
                 requestTime = "2021-03-21T18:16:55.351733200",
-                channel = Stubs.channel.toDto()
+                channel = channelStub.toDto()
             )
 
             handleRequest(HttpMethod.Post, ChannelApi.baseUri + ChannelApi.createChannelUri) {
@@ -42,7 +44,7 @@ internal class ChannelTest {
                 )
 
                 assertEquals(
-                    Stubs.createChannelResponse.copy(request = request),
+                    createChannelResponse.copy(request = request),
                     responseBody
                 )
             }
@@ -57,7 +59,7 @@ internal class ChannelTest {
                 type = "DeleteChannelRequest",
                 requestId = "c11dcf66-57fa-495b-af21-162a6dfcbffa",
                 requestTime = "2021-03-21T18:16:55.351733200",
-                channelId = ChannelService.channelDto.id
+                channelId = channelStub.channelId.id
             )
 
             handleRequest(HttpMethod.Post, ChannelApi.baseUri + ChannelApi.deleteChannelUri) {
@@ -78,7 +80,7 @@ internal class ChannelTest {
                 )
 
                 assertEquals(
-                    ChannelService.deleteChannelResponse.copy(request = request),
+                    deleteChannelResponse.copy(request = request),
                     responseBody
                 )
             }
@@ -94,7 +96,7 @@ internal class ChannelTest {
                 requestId = "c11dcf66-57fa-495b-af21-162a6dfcbffa",
                 requestTime = "2021-03-21T18:16:55.351733200",
                 filter = ChannelFilterDto(
-                    channelIds = listOf(ChannelService.channelDto.id!!),
+                    channelIds = listOf(channelStub.channelId.id),
                     pageSize = 100,
                     pageNumber = 0
                 )
@@ -118,7 +120,7 @@ internal class ChannelTest {
                 )
 
                 assertEquals(
-                    ChannelService.getChannelResponse.copy(request = request),
+                    getChannelResponse.copy(request = request),
                     responseBody
                 )
             }

@@ -13,7 +13,7 @@ import ru.otus.kotlin.messaging.api.model.message.dto.ChannelMessageDto
 import ru.otus.kotlin.messaging.api.model.message.dto.ChannelMessageFilter
 import ru.otus.kotlin.messaging.app.ktor.common.CommonTest.contentType
 import ru.otus.kotlin.messaging.app.ktor.service.MessagingService
-import ru.otus.kotlin.messaging.business.backend.operation.stub.Stubs
+import ru.otus.kotlin.messaging.business.backend.operation.stub.MessageStubs
 import ru.otus.kotlin.messaging.mapper.openapi.generalRequestResponseSerializer
 import kotlin.test.assertEquals
 
@@ -46,7 +46,7 @@ internal class MessagingTest {
                 )
 
                 assertEquals(
-                    Stubs.createChannelMessageResponse.copy(request = request),
+                    MessageStubs.createChannelMessageResponse.copy(request = request),
                     responseBody
                 )
             }

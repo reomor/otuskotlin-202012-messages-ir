@@ -15,8 +15,8 @@ object MessageCreateStub : IOperation<TransportContext> by pipeline({
         startIf { stubCase == ContextStubCase.MESSAGE_CREATE_SUCCESS }
 
         execute {
-            responseId = Stubs.createChannelMessageResponse.responseId!!
-            responseTime = Stubs.createChannelMessageResponse.responseTime!!
+            responseId = MessageStubs.createChannelMessageResponse.responseId!!
+            responseTime = MessageStubs.createChannelMessageResponse.responseTime!!
             messagingContext.errors = emptyList()
         }
     }

@@ -26,6 +26,28 @@ object MessageCreatePipeline : IOperation<TransportContext> by pipeline({
 //        }
 //    }
 
-    execute(MessageCreateStub)
+    execute(MessageStubPipeline)
     execute(FinishPipeline)
+})
+
+object MessageDeletePipeline : IOperation<TransportContext> by pipeline({
+    execute(InitializePipeline)
+    execute(MessageStubPipeline)
+    execute(FinishPipeline)
+})
+
+object MessageEditPipeline : IOperation<TransportContext> by pipeline({
+    execute(InitializePipeline)
+    execute(MessageStubPipeline)
+    execute(FinishPipeline)
+})
+
+object MessageGetPipeline : IOperation<TransportContext> by pipeline({
+    execute(InitializePipeline)
+    execute(MessageStubPipeline)
+    execute(FinishPipeline)
+})
+
+object MessageStubPipeline : IOperation<TransportContext> by pipeline({
+    execute(MessageCreateStub)
 })

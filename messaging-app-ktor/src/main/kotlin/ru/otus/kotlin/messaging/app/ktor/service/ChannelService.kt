@@ -20,46 +20,16 @@ class ChannelService(
     }
 
     suspend fun delete(request: DeleteChannelRequest): BaseMessage = TransportContext().run {
+        stubCase = ContextStubCase.CHANNEL_DELETE_SUCCESS
         setRequest(request)
-        deleteChannelResponse.copy(request = request)
+        channelPipelineService.delete(this)
+        DeleteChannelResponse().fromContext(this)
     }
 
     suspend fun get(request: GetChannelRequest): BaseMessage = TransportContext().run {
+        stubCase = ContextStubCase.CHANNEL_GET_SUCCESS
         setRequest(request)
-        getChannelResponse.copy(request = request)
-    }
-
-    companion object {
-
-        val channelDto = ChannelDto(
-            id = "d992d2f5-e6ed-4172-99a6-012dd118e634",
-            name = "channelName",
-            ownerId = "ade08ffd-d670-4e13-b1a9-f211672522d1",
-            type = PUBLIC_CHANNEL
-        )
-
-        val createChannelResponse = CreateChannelResponse(
-            type = "CreateChannelResponse",
-            responseId = "853f7a05-2292-446d-bd13-050c43bfc9df",
-            responseTime = "2021-03-21T18:16:55.351733200",
-            status = ResponseStatus.SUCCESS,
-            channel = channelDto
-        )
-
-        val deleteChannelResponse = DeleteChannelResponse(
-            type = "DeleteChannelResponse",
-            responseId = "853f7a05-2292-446d-bd13-050c43bfc9df",
-            responseTime = "2021-03-21T18:16:55.351733200",
-            status = ResponseStatus.SUCCESS,
-            channel = channelDto
-        )
-
-        val getChannelResponse = GetChannelResponse(
-            type = "GetChannelResponse",
-            responseId = "853f7a05-2292-446d-bd13-050c43bfc9df",
-            responseTime = "2021-03-21T18:16:55.351733200",
-            status = ResponseStatus.SUCCESS,
-            channels = listOf(channelDto)
-        )
+        channelPipelineService.get(this)
+        GetChannelResponse().fromContext(this)
     }
 }

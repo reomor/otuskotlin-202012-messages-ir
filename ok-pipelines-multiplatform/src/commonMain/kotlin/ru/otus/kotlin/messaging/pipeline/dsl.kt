@@ -13,8 +13,8 @@ inline fun <T> pipeline(block: Pipeline.Builder<T>.() -> Unit): Pipeline<T> =
 inline fun <T> Pipeline.Builder<T>.pipeline(block: Pipeline.Builder<T>.() -> Unit) =
     execute(
         Pipeline.Builder<T>()
-        .apply(block)
-        .build()
+            .apply(block)
+            .build()
     )
 
 inline fun <T> Pipeline.Builder<T>.operation(block: Operation.Builder<T>.() -> Unit) =
