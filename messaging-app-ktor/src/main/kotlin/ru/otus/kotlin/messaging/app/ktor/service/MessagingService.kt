@@ -21,47 +21,23 @@ class MessagingService(
     }
 
     suspend fun delete(request: DeleteChannelMessageRequest): Response = TransportContext().run {
-        commonContext.request = request
-        messagingContext.setRequest(request)
-        deleteChannelMessageResponse.copy(request = request)
+        stubCase = ContextStubCase.MESSAGE_DELETE_SUCCESS
+        setRequest(request)
+        messagePipelineService.delete(this)
+        DeleteChannelMessageResponse().fromContext(this)
     }
 
     suspend fun edit(request: EditChannelMessageRequest): Response = TransportContext().run {
-        commonContext.request = request
-        messagingContext.setRequest(request)
-        editChannelMessageResponse.copy(request = request)
+        stubCase = ContextStubCase.MESSAGE_EDIT_SUCCESS
+        setRequest(request)
+        messagePipelineService.edit(this)
+        EditChannelMessageResponse().fromContext(this)
     }
 
     suspend fun get(request: GetChannelMessageRequest): Response = TransportContext().run {
-        commonContext.request = request
-        messagingContext.setRequest(request)
-        getChannelMessageResponse.copy(request = request)
-    }
-
-    companion object {
-
-        fun emptyResponse(): Nothing = throw IllegalArgumentException("response is not set")
-
-        val channelMessageDto = ChannelMessageDto(
-            profileIdFrom = "d6a3577b-395a-4772-ba46-77ce6290a991",
-            profileIdTo = "62b80aff-1e25-4726-bc9e-b64d509cae74",
-            messageText = "Text message1"
-        )
-
-        val deleteChannelMessageResponse = DeleteChannelMessageResponse(
-            responseId = "853f7a05-2292-446d-bd13-050c43bfc9df",
-            responseTime = "2021-03-21T18:16:55.351733200"
-        )
-
-        val editChannelMessageResponse = EditChannelMessageResponse(
-            responseId = "853f7a05-2292-446d-bd13-050c43bfc9df",
-            responseTime = "2021-03-21T18:16:55.351733200"
-        )
-
-        val getChannelMessageResponse = GetChannelMessageResponse(
-            responseId = "853f7a05-2292-446d-bd13-050c43bfc9df",
-            responseTime = "2021-03-21T18:16:55.351733200",
-            data = listOf(channelMessageDto)
-        )
+        stubCase = ContextStubCase.MESSAGE_GET_SUCCESS
+        setRequest(request)
+        messagePipelineService.get(this)
+        GetChannelMessageResponse().fromContext(this)
     }
 }

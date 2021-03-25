@@ -30,44 +30,14 @@ fun CreateChannelMessageResponse.fromContext(
         )
     }
 
-fun DeleteChannelMessageResponse.toDto(
-    transportContext: TransportContext,
-    responseStatus: CommonResponseStatus = CommonResponseStatus.SUCCESS
-): DeleteChannelMessageResponse =
-    transportContext.addToCommonContext(this) { response ->
-        DeleteChannelMessageResponse(
-            responseId = response.responseId,
-            responseTime = response.responseTime,
-            errors = transportContext.messagingContext.errors.toCommonErrorDto(),
-            status = CommonResponseStatus.valueOf(responseStatus.name.toUpperCase()),
-            request = transportContext.commonContext.request
-        )
-    }
-
 fun DeleteChannelMessageResponse.fromContext(
     transportContext: TransportContext,
-    responseId: String = UUID.randomUUID().toString(),
-    responseTime: String? = LocalDateTime.now().toString(),
     responseStatus: CommonResponseStatus = CommonResponseStatus.SUCCESS
 ): DeleteChannelMessageResponse =
     transportContext.addToCommonContext {
         DeleteChannelMessageResponse(
-            responseId = responseId,
-            responseTime = responseTime,
-            errors = transportContext.messagingContext.errors.toCommonErrorDto(),
-            status = CommonResponseStatus.valueOf(responseStatus.name.toUpperCase()),
-            request = transportContext.commonContext.request
-        )
-    }
-
-fun EditChannelMessageResponse.toDto(
-    transportContext: TransportContext,
-    responseStatus: CommonResponseStatus = CommonResponseStatus.SUCCESS
-): EditChannelMessageResponse =
-    transportContext.addToCommonContext(this) { response ->
-        EditChannelMessageResponse(
-            responseId = response.responseId,
-            responseTime = response.responseTime,
+            responseId = transportContext.responseId,
+            responseTime = transportContext.responseTime,
             errors = transportContext.messagingContext.errors.toCommonErrorDto(),
             status = CommonResponseStatus.valueOf(responseStatus.name.toUpperCase()),
             request = transportContext.commonContext.request
@@ -76,29 +46,12 @@ fun EditChannelMessageResponse.toDto(
 
 fun EditChannelMessageResponse.fromContext(
     transportContext: TransportContext,
-    responseId: String = UUID.randomUUID().toString(),
-    responseTime: String? = LocalDateTime.now().toString(),
     responseStatus: CommonResponseStatus = CommonResponseStatus.SUCCESS
 ): EditChannelMessageResponse =
     transportContext.addToCommonContext {
         EditChannelMessageResponse(
-            responseId = responseId,
-            responseTime = responseTime,
-            errors = transportContext.messagingContext.errors.toCommonErrorDto(),
-            status = CommonResponseStatus.valueOf(responseStatus.name.toUpperCase()),
-            request = transportContext.commonContext.request
-        )
-    }
-
-fun GetChannelMessageResponse.toDto(
-    transportContext: TransportContext,
-    responseStatus: CommonResponseStatus = CommonResponseStatus.SUCCESS
-): GetChannelMessageResponse =
-    transportContext.addToCommonContext(this) { response ->
-        GetChannelMessageResponse(
-            responseId = response.responseId,
-            responseTime = response.responseTime,
-            data = transportContext.messagingContext.messages.toMessageDto(),
+            responseId = transportContext.responseId,
+            responseTime = transportContext.responseTime,
             errors = transportContext.messagingContext.errors.toCommonErrorDto(),
             status = CommonResponseStatus.valueOf(responseStatus.name.toUpperCase()),
             request = transportContext.commonContext.request
@@ -107,15 +60,13 @@ fun GetChannelMessageResponse.toDto(
 
 fun GetChannelMessageResponse.fromContext(
     transportContext: TransportContext,
-    responseId: String = UUID.randomUUID().toString(),
-    responseTime: String? = LocalDateTime.now().toString(),
     responseStatus: CommonResponseStatus = CommonResponseStatus.SUCCESS
 ): GetChannelMessageResponse =
     transportContext.addToCommonContext {
         GetChannelMessageResponse(
-            responseId = responseId,
-            responseTime = responseTime,
-            data = transportContext.messagingContext.messages.toMessageDto(),
+            responseId = transportContext.responseId,
+            responseTime = transportContext.responseTime,
+            data = transportContext.messagingContext.messages.map { it.toMessageDto() },
             errors = transportContext.messagingContext.errors.toCommonErrorDto(),
             status = CommonResponseStatus.valueOf(responseStatus.name.toUpperCase()),
             request = transportContext.commonContext.request
@@ -180,23 +131,24 @@ private fun <T : BaseMessage> TransportContext.addToOpenApiContext(block: () -> 
 private fun <T : BaseMessage> TransportContext.addToOpenApiContext(baseResponse: T, block: (response: T) -> T): T =
     block(baseResponse).also { openApiContext.response = it }
 
-fun List<Message>.toMessageDto(): List<ChannelMessageDto> =
-    map { message ->
-        when (message) {
+fun Message.toMessageDto(): ChannelMessageDto {
+    this.run {
+        return when (this) {
             is InstantMessage -> ChannelMessageDto(
-                profileIdFrom = message.profileIdFrom.id,
-                profileIdTo = message.profileIdTo.id,
-                messageText = message.messageText,
-                resourceLinks = message.resourceLinks
+                profileIdFrom = profileIdFrom.id,
+                profileIdTo = profileIdTo.id,
+                messageText = messageText,
+                resourceLinks = resourceLinks
             )
             is ChannelMessage -> ChannelMessageDto(
-                profileIdFrom = message.profileIdFrom.id,
-                channelId = message.channelId.id,
-                messageText = message.messageText,
-                resourceLinks = message.resourceLinks
+                profileIdFrom = profileIdFrom.id,
+                channelId = channelId.id,
+                messageText = messageText,
+                resourceLinks = resourceLinks
             )
         }
     }
+}
 
 fun List<Error>.toCommonErrorDto(): List<CommonErrorDto> {
     return map { error ->

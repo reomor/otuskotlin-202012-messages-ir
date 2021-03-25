@@ -12,8 +12,8 @@ import ru.otus.kotlin.messaging.api.model.message.GetChannelMessageRequest
 import ru.otus.kotlin.messaging.api.model.message.dto.ChannelMessageDto
 import ru.otus.kotlin.messaging.api.model.message.dto.ChannelMessageFilter
 import ru.otus.kotlin.messaging.app.ktor.common.CommonTest.contentType
-import ru.otus.kotlin.messaging.app.ktor.service.MessagingService
 import ru.otus.kotlin.messaging.business.backend.operation.stub.MessageStubs
+import ru.otus.kotlin.messaging.mapper.context.toMessageDto
 import ru.otus.kotlin.messaging.mapper.openapi.generalRequestResponseSerializer
 import kotlin.test.assertEquals
 
@@ -77,7 +77,7 @@ internal class MessagingTest {
                 )
 
                 assertEquals(
-                    MessagingService.deleteChannelMessageResponse.copy(request = request),
+                    MessageStubs.deleteChannelMessageResponse.copy(request = request),
                     responseBody
                 )
             }
@@ -93,7 +93,7 @@ internal class MessagingTest {
                 requestTime = "2021-03-21T18:16:55.351733200",
                 messageId = "4c7730f0-48cf-453f-a129-9445c31effb6",
                 channelId = "a70e38cf-c052-46d4-92ed-5c9a25eb9f6b",
-                data = MessagingService.channelMessageDto
+                data = MessageStubs.channelMessageStub.toMessageDto()
             )
 
             handleRequest(HttpMethod.Post, MessagingApi.baseUri + MessagingApi.editMessageUri) {
@@ -109,7 +109,7 @@ internal class MessagingTest {
                 )
 
                 assertEquals(
-                    MessagingService.editChannelMessageResponse.copy(request = request),
+                    MessageStubs.editChannelMessageResponse.copy(request = request),
                     responseBody
                 )
             }
@@ -144,7 +144,7 @@ internal class MessagingTest {
                 )
 
                 assertEquals(
-                    MessagingService.getChannelMessageResponse.copy(request = request),
+                    MessageStubs.getChannelMessageResponse.copy(request = request),
                     responseBody
                 )
             }

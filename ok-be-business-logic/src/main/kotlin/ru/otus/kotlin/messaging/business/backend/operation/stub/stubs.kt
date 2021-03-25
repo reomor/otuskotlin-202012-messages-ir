@@ -1,18 +1,44 @@
 package ru.otus.kotlin.messaging.business.backend.operation.stub
 
-import ru.otus.kotlin.messaging.Channel
-import ru.otus.kotlin.messaging.ChannelId
-import ru.otus.kotlin.messaging.ChannelType
-import ru.otus.kotlin.messaging.ProfileId
+import ru.otus.kotlin.messaging.*
 import ru.otus.kotlin.messaging.api.model.message.CreateChannelMessageResponse
+import ru.otus.kotlin.messaging.api.model.message.DeleteChannelMessageResponse
+import ru.otus.kotlin.messaging.api.model.message.EditChannelMessageResponse
+import ru.otus.kotlin.messaging.api.model.message.GetChannelMessageResponse
 import ru.otus.kotlin.messaging.mapper.context.toDto
-import ru.otus.kotlin.messaging.openapi.channel.models.*
+import ru.otus.kotlin.messaging.mapper.context.toMessageDto
+import ru.otus.kotlin.messaging.openapi.channel.models.CreateChannelResponse
+import ru.otus.kotlin.messaging.openapi.channel.models.DeleteChannelResponse
+import ru.otus.kotlin.messaging.openapi.channel.models.GetChannelResponse
+import ru.otus.kotlin.messaging.openapi.channel.models.ResponseStatus
 
 object MessageStubs {
 
     val createChannelMessageResponse = CreateChannelMessageResponse(
         responseId = "853f7a05-2292-446d-bd13-050c43bfc9df",
         responseTime = "2021-03-21T18:16:55.351733200"
+    )
+
+    val channelMessageStub = InstantMessage(
+        profileIdFrom = ProfileId("d6a3577b-395a-4772-ba46-77ce6290a991"),
+        profileIdTo = ProfileId("62b80aff-1e25-4726-bc9e-b64d509cae74"),
+        messageText = "Text message1"
+    )
+
+    val deleteChannelMessageResponse = DeleteChannelMessageResponse(
+        responseId = "853f7a05-2292-446d-bd13-050c43bfc9df",
+        responseTime = "2021-03-21T18:16:55.351733200"
+    )
+
+    val editChannelMessageResponse = EditChannelMessageResponse(
+        responseId = "853f7a05-2292-446d-bd13-050c43bfc9df",
+        responseTime = "2021-03-21T18:16:55.351733200"
+    )
+
+    val getChannelMessageResponse = GetChannelMessageResponse(
+        responseId = "853f7a05-2292-446d-bd13-050c43bfc9df",
+        responseTime = "2021-03-21T18:16:55.351733200",
+        data = listOf(channelMessageStub.toMessageDto())
     )
 }
 

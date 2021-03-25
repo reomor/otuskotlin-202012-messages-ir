@@ -27,6 +27,9 @@ object ChannelGetPipeline : IOperation<TransportContext> by pipeline({
     execute(FinishPipeline)
 })
 
+/**
+ * All channel stub cases
+ */
 object ChannelStubPipeline : IOperation<TransportContext> by pipeline({
     execute(ChannelCreateStub)
     execute(ChannelDeleteStub)
