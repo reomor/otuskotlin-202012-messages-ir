@@ -6,18 +6,20 @@ import ru.otus.kotlin.messaging.pipeline.IOperation
 import ru.otus.kotlin.messaging.pipeline.operation
 import ru.otus.kotlin.messaging.pipeline.pipeline
 
-object MessageCreateStub : IOperation<TransportContext> by pipeline({
+object ChannelCreateStub : IOperation<TransportContext> by pipeline({
 
     startIf { stubCase != ContextStubCase.NONE }
 
     operation {
 
-        startIf { stubCase == ContextStubCase.MESSAGE_CREATE_SUCCESS }
+        startIf { stubCase == ContextStubCase.CHANNEL_CREATE_SUCCESS }
 
         execute {
-            responseId = Stubs.createChannelMessageResponse.responseId!!
-            responseTime = Stubs.createChannelMessageResponse.responseTime!!
-            messagingContext.errors = emptyList()
+            messagingContext.apply {
+                responseId = Stubs.createChannelResponse.responseId!!
+                responseTime = Stubs.createChannelResponse.responseTime!!
+                channel = Stubs.channel
+            }
         }
     }
 })

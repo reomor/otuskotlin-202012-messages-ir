@@ -13,6 +13,7 @@ class MessagingContext(
     var messages: List<Message> = emptyList(),
     var channels: List<Channel> = emptyList(),
     var errors: List<Error> = emptyList(),
+
     private var _page: Page? = null,
     private var _channel: Channel? = null,
     private var _instantMessage: InstantMessage? = null,

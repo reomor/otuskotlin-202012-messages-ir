@@ -1,5 +1,6 @@
 package ru.otus.kotlin.messaging.business.backend.pipeline
 
+import ru.otus.kotlin.messaging.business.backend.operation.FinishPipeline
 import ru.otus.kotlin.messaging.business.backend.operation.InitializePipeline
 import ru.otus.kotlin.messaging.business.backend.operation.stub.MessageCreateStub
 import ru.otus.kotlin.messaging.mapper.context.TransportContext
@@ -16,8 +17,9 @@ object MessageCreatePipeline : IOperation<TransportContext> by pipeline({
 //        startIf { status == TransportContextStatus.NONE }
 //        execute { status = TransportContextStatus.RUNNING }
 //    }
-//    but execution with builder can cause ConcurrentModificationException
-//    because
+
+//    but execution of that will cause ConcurrentModificationException
+//    because run another builder
 //    execute {
 //        operation {
 //
@@ -25,16 +27,5 @@ object MessageCreatePipeline : IOperation<TransportContext> by pipeline({
 //    }
 
     execute(MessageCreateStub)
-
-    pipeline {
-        operation {
-            startIf { status in setOf(TransportContextStatus.RUNNING, TransportContextStatus.FINISHING) }
-            execute { status = TransportContextStatus.SUCCESS }
-        }
-
-        operation {
-            startIf { status != TransportContextStatus.SUCCESS }
-            execute { status = TransportContextStatus.ERROR }
-        }
-    }
+    execute(FinishPipeline)
 })

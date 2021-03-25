@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":ok-multiplatform-mapping"))
     implementation(project(":ok-pipelines-multiplatform"))
     implementation(project(":ok-transport-multiplatform-api"))
+    implementation(project(":ok-transport-openapi"))
 
     testImplementation("org.junit.jupiter", "junit-jupiter-api", junitVersion)
     testImplementation("org.junit.jupiter", "junit-jupiter-engine", junitVersion)

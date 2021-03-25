@@ -17,11 +17,7 @@ class MessagingService(
         stubCase = ContextStubCase.MESSAGE_CREATE_SUCCESS
         setRequest(request)
         messagePipelineService.create(this)
-        CreateChannelMessageResponse().fromContext(
-            transportContext = this,
-            responseId = createChannelMessageResponse.responseId!!,
-            responseTime = createChannelMessageResponse.responseTime!!
-        )
+        CreateChannelMessageResponse().fromContext(this)
     }
 
     suspend fun delete(request: DeleteChannelMessageRequest): Response = TransportContext().run {
@@ -50,11 +46,6 @@ class MessagingService(
             profileIdFrom = "d6a3577b-395a-4772-ba46-77ce6290a991",
             profileIdTo = "62b80aff-1e25-4726-bc9e-b64d509cae74",
             messageText = "Text message1"
-        )
-
-        val createChannelMessageResponse = CreateChannelMessageResponse(
-            responseId = "853f7a05-2292-446d-bd13-050c43bfc9df",
-            responseTime = "2021-03-21T18:16:55.351733200"
         )
 
         val deleteChannelMessageResponse = DeleteChannelMessageResponse(

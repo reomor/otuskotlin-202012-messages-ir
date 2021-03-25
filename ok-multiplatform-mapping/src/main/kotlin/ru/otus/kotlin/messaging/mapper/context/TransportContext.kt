@@ -4,6 +4,8 @@ import ru.otus.kotlin.messaging.api.model.common.Request
 import ru.otus.kotlin.messaging.api.model.common.Response
 import ru.otus.kotlin.messaging.context.MessagingContext
 import ru.otus.kotlin.messaging.openapi.channel.models.BaseMessage
+import java.time.LocalDateTime
+import java.util.*
 
 data class TransportContext(
     var status: TransportContextStatus = TransportContextStatus.NONE,
@@ -11,8 +13,23 @@ data class TransportContext(
 
     var messagingContext: MessagingContext = MessagingContext(),
     var commonContext: CommonContext = CommonContext(),
-    var openApiContext: OpenApiContext = OpenApiContext()
-)
+    var openApiContext: OpenApiContext = OpenApiContext(),
+
+    private var _responseId: String = UUID.randomUUID().toString(),
+    private var _responseTime: String? = null
+) {
+    var responseId: String
+        get() = _responseId
+        set(value) {
+            _responseId = value
+        }
+
+    var responseTime: String
+        get() = _responseTime ?: LocalDateTime.now().toString()
+        set(value) {
+            _responseTime = value
+        }
+}
 
 data class CommonContext(
     var request: Request? = null,

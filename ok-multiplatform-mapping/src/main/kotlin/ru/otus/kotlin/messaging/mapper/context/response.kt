@@ -16,30 +16,14 @@ import ru.otus.kotlin.messaging.openapi.channel.models.ErrorSeverity
 import java.time.LocalDateTime
 import java.util.*
 
-fun CreateChannelMessageResponse.toDto(
-    transportContext: TransportContext,
-    responseStatus: CommonResponseStatus = CommonResponseStatus.SUCCESS
-): CreateChannelMessageResponse =
-    transportContext.addToCommonContext(this) { response ->
-        CreateChannelMessageResponse(
-            responseId = response.responseId,
-            responseTime = response.responseTime,
-            errors = transportContext.messagingContext.errors.toCommonErrorDto(),
-            status = CommonResponseStatus.valueOf(responseStatus.name.toUpperCase()),
-            request = transportContext.commonContext.request
-        )
-    }
-
 fun CreateChannelMessageResponse.fromContext(
     transportContext: TransportContext,
-    responseId: String = UUID.randomUUID().toString(),
-    responseTime: String? = LocalDateTime.now().toString(),
     responseStatus: CommonResponseStatus = CommonResponseStatus.SUCCESS
 ): CreateChannelMessageResponse =
     transportContext.addToCommonContext {
         CreateChannelMessageResponse(
-            responseId = responseId,
-            responseTime = responseTime,
+            responseId = transportContext.responseId,
+            responseTime = transportContext.responseTime,
             errors = transportContext.messagingContext.errors.toCommonErrorDto(),
             status = CommonResponseStatus.valueOf(responseStatus.name.toUpperCase()),
             request = transportContext.commonContext.request
@@ -138,32 +122,15 @@ fun GetChannelMessageResponse.fromContext(
         )
     }
 
-fun CreateChannelResponse.toDto(
-    transportContext: TransportContext,
-    responseStatus: CommonResponseStatus = CommonResponseStatus.SUCCESS
-): CreateChannelResponse =
-    transportContext.addToOpenApiContext(this) { response ->
-        CreateChannelResponse(
-            responseId = response.responseId,
-            responseTime = response.responseTime,
-            errors = transportContext.messagingContext.errors.toOpenApiErrorDto(),
-            status = ResponseStatus.valueOf(responseStatus.name.toUpperCase()),
-            request = transportContext.openApiContext.request,
-            channel = transportContext.messagingContext.channel.toDto()
-        )
-    }
-
 fun CreateChannelResponse.fromContext(
     transportContext: TransportContext,
-    responseId: String = UUID.randomUUID().toString(),
-    responseTime: String? = LocalDateTime.now().toString(),
     responseStatus: CommonResponseStatus = CommonResponseStatus.SUCCESS
 ): CreateChannelResponse =
     transportContext.addToOpenApiContext {
         CreateChannelResponse(
             type = "CreateChannelResponse",
-            responseId = responseId,
-            responseTime = responseTime,
+            responseId = transportContext.responseId,
+            responseTime = transportContext.responseTime,
             errors = transportContext.messagingContext.errors.toOpenApiErrorDto(),
             status = ResponseStatus.valueOf(responseStatus.name.toUpperCase()),
             request = transportContext.openApiContext.request,
@@ -236,18 +203,18 @@ fun GetChannelResponse.fromContext(
     }
 
 private fun <T : Response> TransportContext.addToCommonContext(block: () -> T): T =
-    block.invoke().also { commonContext.response = it }
+    block().also { commonContext.response = it }
 
 private fun <T : Response> TransportContext.addToCommonContext(baseResponse: T, block: (response: T) -> T): T =
-    block.invoke(baseResponse).also { commonContext.response = it }
+    block(baseResponse).also { commonContext.response = it }
 
 private fun <T : BaseMessage> TransportContext.addToOpenApiContext(block: () -> T): T =
-    block.invoke().also { openApiContext.response = it }
+    block().also { openApiContext.response = it }
 
 private fun <T : BaseMessage> TransportContext.addToOpenApiContext(baseResponse: T, block: (response: T) -> T): T =
-    block.invoke(baseResponse).also { openApiContext.response = it }
+    block(baseResponse).also { openApiContext.response = it }
 
-private fun List<Message>.toMessageDto(): List<ChannelMessageDto> =
+fun List<Message>.toMessageDto(): List<ChannelMessageDto> =
     map { message ->
         when (message) {
             is InstantMessage -> ChannelMessageDto(
@@ -265,7 +232,7 @@ private fun List<Message>.toMessageDto(): List<ChannelMessageDto> =
         }
     }
 
-private fun List<Error>.toCommonErrorDto(): List<CommonErrorDto> {
+fun List<Error>.toCommonErrorDto(): List<CommonErrorDto> {
     return map { error ->
         CommonErrorDto(
             code = error.code,
@@ -275,7 +242,7 @@ private fun List<Error>.toCommonErrorDto(): List<CommonErrorDto> {
     }.toList()
 }
 
-private fun List<Error>.toOpenApiErrorDto(): List<ErrorDto> {
+fun List<Error>.toOpenApiErrorDto(): List<ErrorDto> {
     return map { error ->
         ErrorDto(
             code = error.code,
@@ -285,7 +252,7 @@ private fun List<Error>.toOpenApiErrorDto(): List<ErrorDto> {
     }.toList()
 }
 
-private fun Channel.toDto(): ChannelDto =
+fun Channel.toDto(): ChannelDto =
     ChannelDto(
         id = this.channelId.id,
         name = this.name,

@@ -5,6 +5,8 @@ import io.ktor.server.testing.*
 import org.junit.Test
 import ru.otus.kotlin.messaging.app.ktor.common.CommonTest.contentType
 import ru.otus.kotlin.messaging.app.ktor.service.ChannelService
+import ru.otus.kotlin.messaging.business.backend.operation.stub.Stubs
+import ru.otus.kotlin.messaging.mapper.context.toDto
 import ru.otus.kotlin.messaging.mapper.openapi.*
 import ru.otus.kotlin.messaging.openapi.channel.models.*
 import kotlin.test.assertEquals
@@ -19,7 +21,7 @@ internal class ChannelTest {
                 type = "CreateChannelRequest",
                 requestId = "c11dcf66-57fa-495b-af21-162a6dfcbffa",
                 requestTime = "2021-03-21T18:16:55.351733200",
-                channel = ChannelService.channelDto
+                channel = Stubs.channel.toDto()
             )
 
             handleRequest(HttpMethod.Post, ChannelApi.baseUri + ChannelApi.createChannelUri) {
@@ -40,7 +42,7 @@ internal class ChannelTest {
                 )
 
                 assertEquals(
-                    ChannelService.createChannelResponse.copy(request = request),
+                    Stubs.createChannelResponse.copy(request = request),
                     responseBody
                 )
             }
