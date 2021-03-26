@@ -11,7 +11,6 @@ import ru.otus.kotlin.messaging.openapi.channel.models.ChannelType.PUBLIC_CHANNE
 class ChannelService(
     private val channelPipelineService: ChannelPipelineService
 ) {
-
     suspend fun create(request: CreateChannelRequest): BaseMessage = TransportContext().run {
         stubCase = ContextStubCase.CHANNEL_CREATE_SUCCESS
         setRequest(request)
