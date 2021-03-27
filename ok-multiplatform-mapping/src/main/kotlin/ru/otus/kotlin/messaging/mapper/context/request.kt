@@ -48,9 +48,21 @@ inline fun <reified T : BaseMessage> TransportContext.setRequest(request: T): Tr
     openApiContext.request = request
     messagingContext = MessagingContext()
     when (T::class) {
-        CreateChannelRequest::class -> messagingContext.setRequest(request as CreateChannelRequest)
-        DeleteChannelRequest::class -> messagingContext.setRequest(request as DeleteChannelRequest)
-        GetChannelRequest::class -> messagingContext.setRequest(request as GetChannelRequest)
+        CreateChannelRequest::class -> {
+            val createChannelRequest = request as CreateChannelRequest
+            stubCase = setStub(createChannelRequest.debug?.stubCase, CHANNEL_CREATE_SUCCESS)
+            messagingContext.setRequest(createChannelRequest)
+        }
+        DeleteChannelRequest::class -> {
+            val deleteChannelRequest = request as DeleteChannelRequest
+            stubCase = setStub(deleteChannelRequest.debug?.stubCase, CHANNEL_DELETE_SUCCESS)
+            messagingContext.setRequest(deleteChannelRequest)
+        }
+        GetChannelRequest::class -> {
+            val getChannelRequest = request as GetChannelRequest
+            stubCase = setStub(getChannelRequest.debug?.stubCase, CHANNEL_GET_SUCCESS)
+            messagingContext.setRequest(getChannelRequest)
+        }
         else -> throw IllegalArgumentException("Class: ${T::class.simpleName} is not supported")
     }
     return this
@@ -130,5 +142,11 @@ private fun MessagingContext.handleMessage(channelMessageDto: ChannelMessageDto)
 inline fun setStub(stubCase: StubCase?, successStubCase: ContextStubCase): ContextStubCase =
     when (stubCase) {
         StubCase.SUCCESS -> successStubCase
+        else -> NONE
+    }
+
+inline fun setStub(stubCase: DebugStub?, successStubCase: ContextStubCase): ContextStubCase =
+    when (stubCase) {
+        DebugStub.SUCCESS -> successStubCase
         else -> NONE
     }

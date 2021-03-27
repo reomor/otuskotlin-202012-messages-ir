@@ -38,6 +38,32 @@ components:
         - WARN
         - FATAL
 
+    DebugMode:
+      type: string
+      title: DebugMode
+      description: 'Debug mode'
+      enum:
+        - TEST
+        - PROD
+
+    DebugStub:
+      type: string
+      title: DebugStub
+      description: 'Debug stub information'
+      enum:
+        - NONE
+        - SUCCESS
+        - FAIL
+
+    DebugDto:
+      type: object
+      title: 'Debug information'
+      properties:
+        mode:
+          $ref: '#/components/schemas/DebugMode'
+        stubCase:
+          $ref: '#/components/schemas/DebugStub'
+
     ErrorDto:
       type: object
       title: Error description
@@ -76,6 +102,8 @@ components:
           type: string
           title: Datetime
           description: 'Date and time when request was received'
+        debug:
+          $ref: '#/components/schemas/DebugDto'
 
     ResponseStatus:
       type: string

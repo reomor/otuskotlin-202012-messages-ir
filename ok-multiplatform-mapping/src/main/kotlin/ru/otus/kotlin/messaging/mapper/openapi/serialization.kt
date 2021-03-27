@@ -1,6 +1,8 @@
 package ru.otus.kotlin.messaging.mapper.openapi
 
-import kotlinx.serialization.*
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.descriptors.*
@@ -12,9 +14,7 @@ import kotlinx.serialization.modules.plus
 import kotlinx.serialization.modules.polymorphic
 import ru.otus.kotlin.messaging.api.model.message.serialization.requestResponseSerializersModules
 import ru.otus.kotlin.messaging.openapi.channel.models.*
-import java.util.*
 
-// FIXME models with nullable
 @ExperimentalSerializationApi
 private val openApiRequestResponseSerializersModules = SerializersModule {
     polymorphic(BaseMessage::class) {
@@ -59,6 +59,7 @@ object CreateChannelRequestSerializer : KSerializer<CreateChannelRequest> {
             element<String>(elementName = "requestId")
             element<String>(elementName = "requestTime")
             element(elementName = "channel", ChannelDtoSerializer.descriptor)
+            element(elementName = "debug", DebugDtoSerializer.descriptor)
         }
 
     override fun serialize(encoder: Encoder, value: CreateChannelRequest) {
@@ -66,6 +67,7 @@ object CreateChannelRequestSerializer : KSerializer<CreateChannelRequest> {
             encodeStringElement(descriptor, 0, value.requestId ?: "")
             encodeStringElement(descriptor, 1, value.requestTime ?: "")
             encodeNullableSerializableElement(descriptor, 2, ChannelDtoSerializer, value.channel)
+            encodeNullableSerializableElement(descriptor, 3, DebugDtoSerializer, value.debug)
         }
     }
 
@@ -75,12 +77,14 @@ object CreateChannelRequestSerializer : KSerializer<CreateChannelRequest> {
             var requestId: String? = null
             var requestTime: String? = null
             var channel: ChannelDto? = null
+            var debug: DebugDto? = null
 
             while (true) {
                 when (val index = decodeElementIndex(descriptor)) {
                     0 -> requestId = decodeStringElement(descriptor, index)
                     1 -> requestTime = decodeStringElement(descriptor, index)
                     2 -> channel = decodeSerializableElement(descriptor, index, ChannelDtoSerializer)
+                    3 -> debug = decodeSerializableElement(descriptor, index, DebugDtoSerializer)
                     CompositeDecoder.DECODE_DONE -> break
                     else -> error("Unexpected index: $index")
                 }
@@ -90,7 +94,8 @@ object CreateChannelRequestSerializer : KSerializer<CreateChannelRequest> {
                 type = "CreateChannelRequest",
                 requestId = requestId,
                 requestTime = requestTime,
-                channel = channel
+                channel = channel,
+                debug = debug
             )
         }
 }
@@ -169,6 +174,7 @@ object DeleteChannelRequestSerializer : KSerializer<DeleteChannelRequest> {
             element<String>(elementName = "requestId")
             element<String>(elementName = "requestTime")
             element<String>(elementName = "channelId")
+            element(elementName = "debug", DebugDtoSerializer.descriptor)
         }
 
     override fun serialize(encoder: Encoder, value: DeleteChannelRequest) {
@@ -176,6 +182,7 @@ object DeleteChannelRequestSerializer : KSerializer<DeleteChannelRequest> {
             encodeStringElement(descriptor, 0, value.requestId ?: "")
             encodeStringElement(descriptor, 1, value.requestTime ?: "")
             encodeStringElement(descriptor, 2, value.channelId ?: "")
+            encodeNullableSerializableElement(descriptor, 3, DebugDtoSerializer, value.debug)
         }
     }
 
@@ -185,12 +192,14 @@ object DeleteChannelRequestSerializer : KSerializer<DeleteChannelRequest> {
             var requestId: String? = null
             var requestTime: String? = null
             var channelId: String? = null
+            var debug: DebugDto? = null
 
             while (true) {
                 when (val index = decodeElementIndex(descriptor)) {
                     0 -> requestId = decodeStringElement(descriptor, index)
                     1 -> requestTime = decodeStringElement(descriptor, index)
                     2 -> channelId = decodeStringElement(descriptor, index)
+                    3 -> debug = decodeSerializableElement(descriptor, index, DebugDtoSerializer)
                     CompositeDecoder.DECODE_DONE -> break
                     else -> error("Unexpected index: $index")
                 }
@@ -199,7 +208,8 @@ object DeleteChannelRequestSerializer : KSerializer<DeleteChannelRequest> {
                 type = "DeleteChannelRequest",
                 requestId = requestId,
                 requestTime = requestTime,
-                channelId = channelId
+                channelId = channelId,
+                debug = debug
             )
         }
 }
@@ -278,6 +288,7 @@ object GetChannelRequestSerializer : KSerializer<GetChannelRequest> {
             element<String>(elementName = "requestId")
             element<String>(elementName = "requestTime")
             element(elementName = "filter", ChannelFilterDtoSerializer.descriptor)
+            element(elementName = "debug", DebugDtoSerializer.descriptor)
         }
 
     override fun serialize(encoder: Encoder, value: GetChannelRequest) {
@@ -285,6 +296,7 @@ object GetChannelRequestSerializer : KSerializer<GetChannelRequest> {
             encodeStringElement(descriptor, 0, value.requestId ?: "")
             encodeStringElement(descriptor, 1, value.requestTime ?: "")
             encodeNullableSerializableElement(descriptor, 2, ChannelFilterDtoSerializer, value.filter)
+            encodeNullableSerializableElement(descriptor, 3, DebugDtoSerializer, value.debug)
         }
     }
 
@@ -294,12 +306,14 @@ object GetChannelRequestSerializer : KSerializer<GetChannelRequest> {
             var requestId: String? = null
             var requestTime: String? = null
             var filter: ChannelFilterDto? = null
+            var debug: DebugDto? = null
 
             while (true) {
                 when (val index = decodeElementIndex(descriptor)) {
                     0 -> requestId = decodeStringElement(descriptor, index)
                     1 -> requestTime = decodeStringElement(descriptor, index)
                     2 -> filter = decodeSerializableElement(descriptor, index, ChannelFilterDtoSerializer)
+                    3 -> debug = decodeSerializableElement(CreateChannelRequestSerializer.descriptor, index, DebugDtoSerializer)
                     CompositeDecoder.DECODE_DONE -> break
                     else -> error("Unexpected index: $index")
                 }
@@ -309,7 +323,8 @@ object GetChannelRequestSerializer : KSerializer<GetChannelRequest> {
                 type = "GetChannelRequest",
                 requestId = requestId,
                 requestTime = requestTime,
-                filter = filter
+                filter = filter,
+                debug = debug
             )
         }
 }
@@ -535,9 +550,11 @@ object ErrorDtoSerializer : KSerializer<ErrorDto> {
 
     override fun deserialize(decoder: Decoder): ErrorDto =
         decoder.decodeStructure(descriptor) {
+
             var code: String? = null
             var level: ErrorSeverity? = null
             var message: String? = null
+
             while (true) {
                 when (val index = decodeElementIndex(descriptor)) {
                     0 -> code = decodeStringElement(descriptor, index)
@@ -547,10 +564,73 @@ object ErrorDtoSerializer : KSerializer<ErrorDto> {
                     else -> error("Unexpected index: $index")
                 }
             }
+
             ErrorDto(
                 code = code,
                 level = level,
                 message = message
             )
         }
+}
+
+object DebugDtoSerializer : KSerializer<DebugDto> {
+
+    override val descriptor: SerialDescriptor =
+        buildClassSerialDescriptor("DebugDto") {
+            element<DebugMode>(elementName = "mode")
+            element<DebugStub>(elementName = "stubCase")
+        }
+
+    override fun serialize(encoder: Encoder, value: DebugDto) =
+        encoder.encodeStructure(ErrorDtoSerializer.descriptor) {
+            encodeNullableSerializableElement(descriptor, 0, DebugModeSerializer, value.mode)
+            encodeNullableSerializableElement(descriptor, 1, DebugStubSerializer, value.stubCase)
+        }
+
+    override fun deserialize(decoder: Decoder): DebugDto =
+        decoder.decodeStructure(descriptor) {
+
+            var mode: DebugMode? = null
+            var stubCase: DebugStub? = null
+
+            while (true) {
+                when (val index = decodeElementIndex(descriptor)) {
+                    0 -> mode = decodeSerializableElement(descriptor, index, DebugModeSerializer)
+                    1 -> stubCase = decodeSerializableElement(descriptor, index, DebugStubSerializer)
+                    CompositeDecoder.DECODE_DONE -> break
+                    else -> error("Unexpected index: $index")
+                }
+            }
+
+            DebugDto(
+                mode = mode,
+                stubCase = stubCase
+            )
+        }
+}
+
+object DebugModeSerializer : KSerializer<DebugMode> {
+    private val serializer = String.serializer()
+
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("DebugMode", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: DebugMode) =
+        serializer.serialize(encoder, value.name)
+
+    override fun deserialize(decoder: Decoder): DebugMode =
+        DebugMode.valueOf(serializer.deserialize(decoder))
+}
+
+object DebugStubSerializer : KSerializer<DebugStub> {
+    private val serializer = String.serializer()
+
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("DebugStub", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: DebugStub) =
+        serializer.serialize(encoder, value.name)
+
+    override fun deserialize(decoder: Decoder): DebugStub =
+        DebugStub.valueOf(serializer.deserialize(decoder))
 }

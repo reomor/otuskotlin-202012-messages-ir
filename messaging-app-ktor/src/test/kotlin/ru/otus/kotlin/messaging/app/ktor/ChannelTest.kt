@@ -23,7 +23,10 @@ internal class ChannelTest {
                 type = "CreateChannelRequest",
                 requestId = "c11dcf66-57fa-495b-af21-162a6dfcbffa",
                 requestTime = "2021-03-21T18:16:55.351733200",
-                channel = channelStub.toDto()
+                channel = channelStub.toDto(),
+                debug = DebugDto(
+                    stubCase = DebugStub.SUCCESS
+                )
             )
 
             handleRequest(HttpMethod.Post, ChannelApi.baseUri + ChannelApi.createChannelUri) {
@@ -59,7 +62,10 @@ internal class ChannelTest {
                 type = "DeleteChannelRequest",
                 requestId = "c11dcf66-57fa-495b-af21-162a6dfcbffa",
                 requestTime = "2021-03-21T18:16:55.351733200",
-                channelId = channelStub.channelId.id
+                channelId = channelStub.channelId.id,
+                debug = DebugDto(
+                    stubCase = DebugStub.SUCCESS
+                )
             )
 
             handleRequest(HttpMethod.Post, ChannelApi.baseUri + ChannelApi.deleteChannelUri) {
@@ -99,6 +105,9 @@ internal class ChannelTest {
                     channelIds = listOf(channelStub.channelId.id),
                     pageSize = 100,
                     pageNumber = 0
+                ),
+                debug = DebugDto(
+                    stubCase = DebugStub.SUCCESS
                 )
             )
 

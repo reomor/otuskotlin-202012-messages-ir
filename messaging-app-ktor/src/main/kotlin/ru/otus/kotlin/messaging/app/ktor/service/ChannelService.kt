@@ -12,21 +12,18 @@ class ChannelService(
     private val channelPipelineService: ChannelPipelineService
 ) {
     suspend fun create(request: CreateChannelRequest): BaseMessage = TransportContext().run {
-        stubCase = ContextStubCase.CHANNEL_CREATE_SUCCESS
         setRequest(request)
         channelPipelineService.create(this)
         CreateChannelResponse().fromContext(this)
     }
 
     suspend fun delete(request: DeleteChannelRequest): BaseMessage = TransportContext().run {
-        stubCase = ContextStubCase.CHANNEL_DELETE_SUCCESS
         setRequest(request)
         channelPipelineService.delete(this)
         DeleteChannelResponse().fromContext(this)
     }
 
     suspend fun get(request: GetChannelRequest): BaseMessage = TransportContext().run {
-        stubCase = ContextStubCase.CHANNEL_GET_SUCCESS
         setRequest(request)
         channelPipelineService.get(this)
         GetChannelResponse().fromContext(this)
