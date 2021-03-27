@@ -4,6 +4,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import ru.otus.kotlin.messaging.api.model.common.AbstractRequest
 import ru.otus.kotlin.messaging.api.model.common.dto.DebugMode
+import ru.otus.kotlin.messaging.api.model.common.dto.IDebug
+import ru.otus.kotlin.messaging.api.model.common.dto.StubCase
 import ru.otus.kotlin.messaging.api.model.message.dto.ChannelMessageDto
 
 @Serializable
@@ -19,6 +21,7 @@ data class EditChannelMessageRequest(
 
     @Serializable
     data class DebugDto(
-        val mode: DebugMode
-    )
+        override val mode: DebugMode? = null,
+        override val stubCase: StubCase? = null
+    ) : IDebug
 }

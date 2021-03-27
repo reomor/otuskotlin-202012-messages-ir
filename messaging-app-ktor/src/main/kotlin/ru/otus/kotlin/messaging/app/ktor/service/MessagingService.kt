@@ -13,28 +13,24 @@ class MessagingService(
     private val messagePipelineService: MessagePipelineService
 ) {
     suspend fun create(request: CreateChannelMessageRequest): Response = TransportContext().run {
-        stubCase = ContextStubCase.MESSAGE_CREATE_SUCCESS
         setRequest(request)
         messagePipelineService.create(this)
         CreateChannelMessageResponse().fromContext(this)
     }
 
     suspend fun delete(request: DeleteChannelMessageRequest): Response = TransportContext().run {
-        stubCase = ContextStubCase.MESSAGE_DELETE_SUCCESS
         setRequest(request)
         messagePipelineService.delete(this)
         DeleteChannelMessageResponse().fromContext(this)
     }
 
     suspend fun edit(request: EditChannelMessageRequest): Response = TransportContext().run {
-        stubCase = ContextStubCase.MESSAGE_EDIT_SUCCESS
         setRequest(request)
         messagePipelineService.edit(this)
         EditChannelMessageResponse().fromContext(this)
     }
 
     suspend fun get(request: GetChannelMessageRequest): Response = TransportContext().run {
-        stubCase = ContextStubCase.MESSAGE_GET_SUCCESS
         setRequest(request)
         messagePipelineService.get(this)
         GetChannelMessageResponse().fromContext(this)

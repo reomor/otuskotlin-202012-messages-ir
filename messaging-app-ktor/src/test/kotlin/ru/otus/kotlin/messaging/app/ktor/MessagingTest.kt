@@ -5,6 +5,7 @@ import io.ktor.server.testing.*
 import org.junit.Test
 import ru.otus.kotlin.messaging.api.model.common.AbstractRequest
 import ru.otus.kotlin.messaging.api.model.common.AbstractResponse
+import ru.otus.kotlin.messaging.api.model.common.dto.StubCase
 import ru.otus.kotlin.messaging.api.model.message.CreateChannelMessageRequest
 import ru.otus.kotlin.messaging.api.model.message.DeleteChannelMessageRequest
 import ru.otus.kotlin.messaging.api.model.message.EditChannelMessageRequest
@@ -30,6 +31,9 @@ internal class MessagingTest {
                     profileIdFrom = "from4458-27ee-4edc-b354-1787c80cc7cf",
                     profileIdTo = "to136bea-9a5d-4737-9deb-c039262427d5",
                     messageText = "Text"
+                ),
+                debug = CreateChannelMessageRequest.DebugDto(
+                    stubCase = StubCase.SUCCESS
                 )
             )
 
@@ -61,7 +65,10 @@ internal class MessagingTest {
                 requestId = "c11dcf66-57fa-495b-af21-162a6dfcbffa",
                 requestTime = "2021-03-21T18:16:55.351733200",
                 messageId = "4c7730f0-48cf-453f-a129-9445c31effb6",
-                channelId = "a70e38cf-c052-46d4-92ed-5c9a25eb9f6b"
+                channelId = "a70e38cf-c052-46d4-92ed-5c9a25eb9f6b",
+                debug = DeleteChannelMessageRequest.DebugDto(
+                    stubCase = StubCase.SUCCESS
+                )
             )
 
             handleRequest(HttpMethod.Post, MessagingApi.baseUri + MessagingApi.deleteMessageUri) {
@@ -93,7 +100,10 @@ internal class MessagingTest {
                 requestTime = "2021-03-21T18:16:55.351733200",
                 messageId = "4c7730f0-48cf-453f-a129-9445c31effb6",
                 channelId = "a70e38cf-c052-46d4-92ed-5c9a25eb9f6b",
-                data = MessageStubs.channelMessageStub.toMessageDto()
+                data = MessageStubs.channelMessageStub.toMessageDto(),
+                debug = EditChannelMessageRequest.DebugDto(
+                    stubCase = StubCase.SUCCESS
+                )
             )
 
             handleRequest(HttpMethod.Post, MessagingApi.baseUri + MessagingApi.editMessageUri) {
@@ -128,6 +138,9 @@ internal class MessagingTest {
                     channelId = "712dea1c-64a9-4970-b63e-5f060a11f617",
                     pageSize = 100,
                     pageNumber = 1
+                ),
+                debug = GetChannelMessageRequest.DebugDto(
+                    stubCase = StubCase.SUCCESS
                 )
             )
 

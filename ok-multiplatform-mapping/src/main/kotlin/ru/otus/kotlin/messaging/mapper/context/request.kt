@@ -3,12 +3,14 @@ package ru.otus.kotlin.messaging.mapper.context
 import ru.otus.kotlin.messaging.*
 import ru.otus.kotlin.messaging.ChannelType
 import ru.otus.kotlin.messaging.api.model.common.Request
+import ru.otus.kotlin.messaging.api.model.common.dto.StubCase
 import ru.otus.kotlin.messaging.api.model.message.CreateChannelMessageRequest
 import ru.otus.kotlin.messaging.api.model.message.DeleteChannelMessageRequest
 import ru.otus.kotlin.messaging.api.model.message.EditChannelMessageRequest
 import ru.otus.kotlin.messaging.api.model.message.GetChannelMessageRequest
 import ru.otus.kotlin.messaging.api.model.message.dto.ChannelMessageDto
 import ru.otus.kotlin.messaging.context.MessagingContext
+import ru.otus.kotlin.messaging.mapper.context.ContextStubCase.*
 import ru.otus.kotlin.messaging.openapi.channel.models.*
 import java.lang.IllegalArgumentException
 import java.util.*
@@ -17,10 +19,26 @@ inline fun <reified T : Request> TransportContext.setRequest(request: T): Transp
     commonContext.request = request
     messagingContext = MessagingContext()
     when (T::class) {
-        CreateChannelMessageRequest::class -> messagingContext.setRequest(request as CreateChannelMessageRequest)
-        DeleteChannelMessageRequest::class -> messagingContext.setRequest(request as DeleteChannelMessageRequest)
-        EditChannelMessageRequest::class -> messagingContext.setRequest(request as EditChannelMessageRequest)
-        GetChannelMessageRequest::class -> messagingContext.setRequest(request as GetChannelMessageRequest)
+        CreateChannelMessageRequest::class -> {
+            val createChannelMessageRequest = request as CreateChannelMessageRequest
+            stubCase = setStub(createChannelMessageRequest.debug?.stubCase, MESSAGE_CREATE_SUCCESS)
+            messagingContext.setRequest(createChannelMessageRequest)
+        }
+        DeleteChannelMessageRequest::class -> {
+            val deleteChannelMessageRequest = request as DeleteChannelMessageRequest
+            stubCase = setStub(deleteChannelMessageRequest.debug?.stubCase, MESSAGE_DELETE_SUCCESS)
+            messagingContext.setRequest(deleteChannelMessageRequest)
+        }
+        EditChannelMessageRequest::class -> {
+            val editChannelMessageRequest = request as EditChannelMessageRequest
+            stubCase = setStub(editChannelMessageRequest.debug?.stubCase, MESSAGE_EDIT_SUCCESS)
+            messagingContext.setRequest(editChannelMessageRequest)
+        }
+        GetChannelMessageRequest::class -> {
+            val getChannelMessageRequest = request as GetChannelMessageRequest
+            stubCase = setStub(getChannelMessageRequest.debug?.stubCase, MESSAGE_GET_SUCCESS)
+            messagingContext.setRequest(getChannelMessageRequest)
+        }
         else -> throw IllegalArgumentException("Class: ${T::class.simpleName} is not supported")
     }
     return this
@@ -108,3 +126,9 @@ private fun MessagingContext.handleMessage(channelMessageDto: ChannelMessageDto)
         }
     }
 }
+
+inline fun setStub(stubCase: StubCase?, successStubCase: ContextStubCase): ContextStubCase =
+    when (stubCase) {
+        StubCase.SUCCESS -> successStubCase
+        else -> NONE
+    }
