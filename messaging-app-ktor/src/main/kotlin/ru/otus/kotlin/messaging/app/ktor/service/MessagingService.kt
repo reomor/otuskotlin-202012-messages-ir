@@ -10,7 +10,7 @@ import ru.otus.kotlin.messaging.mapper.context.setRequest
 class MessagingService(
     private val messagePipelineService: MessagePipelineService
 ) {
-    suspend fun create(request: CreateChannelMessageRequest): Response = TransportContext().run {
+    suspend fun create(request: CreateChannelMessageRequest): CreateChannelMessageResponse = TransportContext().run {
         setRequest(request)
         messagePipelineService.create(this)
         CreateChannelMessageResponse().fromContext(this)

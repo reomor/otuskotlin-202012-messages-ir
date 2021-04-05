@@ -5,7 +5,6 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import ru.otus.kotlin.messaging.api.model.common.Request
-import ru.otus.kotlin.messaging.api.model.common.Response
 import ru.otus.kotlin.messaging.api.model.common.dto.CommonResponseStatus
 import ru.otus.kotlin.messaging.api.model.common.error.CommonErrorDto
 import ru.otus.kotlin.messaging.api.model.message.*
@@ -20,7 +19,7 @@ fun Route.messageRoute(messagingService: MessagingService) {
     route(MessagingApi.baseUri) {
 
         post(MessagingApi.createMessageUri) {
-            handleRequest<CreateChannelMessageRequest, Response> { request ->
+            handleRequest<CreateChannelMessageRequest, CreateChannelMessageResponse> { request ->
                 messagingService.create(request)
             }
         }
@@ -32,7 +31,7 @@ fun Route.messageRoute(messagingService: MessagingService) {
                 call.respond(response)
             } catch (e: Exception) {
                 call.respond(
-                    CreateChannelMessageResponse(
+                    DeleteChannelMessageResponse(
                         status = CommonResponseStatus.BAD_REQUEST,
                         errors = listOf(
                             CommonErrorDto(
@@ -51,7 +50,7 @@ fun Route.messageRoute(messagingService: MessagingService) {
                 call.respond(response)
             } catch (e: Exception) {
                 call.respond(
-                    CreateChannelMessageResponse(
+                    EditChannelMessageResponse(
                         status = CommonResponseStatus.BAD_REQUEST,
                         errors = listOf(
                             CommonErrorDto(
@@ -70,7 +69,7 @@ fun Route.messageRoute(messagingService: MessagingService) {
                 call.respond(response)
             } catch (e: Exception) {
                 call.respond(
-                    CreateChannelMessageResponse(
+                    GetChannelMessageResponse(
                         status = CommonResponseStatus.BAD_REQUEST,
                         errors = listOf(
                             CommonErrorDto(
