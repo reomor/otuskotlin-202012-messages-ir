@@ -5,6 +5,7 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import ru.otus.kotlin.messaging.api.model.common.Request
+import ru.otus.kotlin.messaging.api.model.common.Response
 import ru.otus.kotlin.messaging.api.model.common.dto.CommonResponseStatus
 import ru.otus.kotlin.messaging.api.model.common.error.CommonErrorDto
 import ru.otus.kotlin.messaging.api.model.message.*
@@ -19,21 +20,8 @@ fun Route.messageRoute(messagingService: MessagingService) {
     route(MessagingApi.baseUri) {
 
         post(MessagingApi.createMessageUri) {
-            try {
-                val request = call.receive<Request>() as CreateChannelMessageRequest
-                val response = messagingService.create(request)
-                call.respond(response)
-            } catch (e: Exception) {
-                call.respond(
-                    CreateChannelMessageResponse(
-                        status = CommonResponseStatus.BAD_REQUEST,
-                        errors = listOf(
-                            CommonErrorDto(
-                                message = e.localizedMessage
-                            )
-                        )
-                    )
-                )
+            handleRequest<CreateChannelMessageRequest, Response> { request ->
+                messagingService.create(request)
             }
         }
 

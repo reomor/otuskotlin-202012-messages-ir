@@ -2,9 +2,7 @@ package ru.otus.kotlin.messaging.app.ktor.service
 
 import ru.otus.kotlin.messaging.api.model.common.Response
 import ru.otus.kotlin.messaging.api.model.message.*
-import ru.otus.kotlin.messaging.api.model.message.dto.ChannelMessageDto
 import ru.otus.kotlin.messaging.business.backend.MessagePipelineService
-import ru.otus.kotlin.messaging.mapper.context.ContextStubCase
 import ru.otus.kotlin.messaging.mapper.context.TransportContext
 import ru.otus.kotlin.messaging.mapper.context.fromContext
 import ru.otus.kotlin.messaging.mapper.context.setRequest
